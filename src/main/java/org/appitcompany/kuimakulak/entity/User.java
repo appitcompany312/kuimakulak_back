@@ -1,7 +1,5 @@
 package org.appitcompany.kuimakulak.entity;
 
-
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.appitcompany.kuimakulak.enums.Role;
