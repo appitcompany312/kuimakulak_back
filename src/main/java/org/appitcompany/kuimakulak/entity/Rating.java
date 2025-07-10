@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "audio_id"})})
+@Table(name = "rating", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "audio_book_id"})})
 public class Rating {
     @Id
     @GeneratedValue(generator = "rating_gen", strategy = GenerationType.SEQUENCE)
