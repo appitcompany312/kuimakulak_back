@@ -24,14 +24,34 @@ repositories {
 }
 
 dependencies {
+	// Spring Boot Starters
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// JWT and Crypto
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	implementation 'org.bouncycastle:bcprov-jdk15on:1.70'
+	implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
+
+	// Database
+	implementation 'org.postgresql:postgresql'
+
+	// OpenAPI/Swagger - Updated version
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
