@@ -1,11 +1,6 @@
 spring:
   application:
     name: KuimaKulak
-  datasource:
-    url: jdbc:postgresql://localhost:5432/kuima_kulak
-    username: postgres
-    password: nurs123
-    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: validate
@@ -17,6 +12,8 @@ spring:
   liquibase:
     change-log: db/changelog/main-changelog.yaml
     enabled: true
+  profiles:
+    active: test
 
 google:
   client-id: 492537232969-g2cdddrm2todlat6at2a7acp2nge5gas.apps.googleusercontent.com
