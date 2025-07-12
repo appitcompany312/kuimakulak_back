@@ -18,13 +18,14 @@ public class Podcast {
     @Id
     @GeneratedValue(generator = "podcast_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "podcast_gen", sequenceName = "podcast_seq", allocationSize = 1, initialValue = 100)
-    private Long podcastId;
+    private Long id;
     private String description;
     private String podcastName;
     private String audioUrl;
     private String bannerUrl;
     private LocalDate publicationDate;
     @ManyToOne
+    @JoinColumn(name = "channel_id")
     private Channel channel;
 
     @OneToMany(mappedBy = "podcast")

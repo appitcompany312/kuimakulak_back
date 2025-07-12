@@ -18,13 +18,15 @@ public class History {
     @Id
     @GeneratedValue(generator = "history_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "history_gen", sequenceName = "history_seq", allocationSize = 1, initialValue = 100)
-    private Long historyId;
+    private Long id;
     private LocalDate createdDate;
 
     @ManyToOne
+    @JoinColumn(name = "podcast_id")
     private Podcast podcast;
 
     @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne

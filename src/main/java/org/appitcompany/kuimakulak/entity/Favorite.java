@@ -19,13 +19,15 @@ public class Favorite {
     @Id
     @GeneratedValue(generator = "favorite_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "favorite_gen", sequenceName = "favorite_seq", allocationSize = 1, initialValue = 100)
-    private Long favoriteId;
+    private Long id;
     private LocalDate savedDate;
 
     @ManyToOne
+    @JoinColumn(name = "podcast_id")
     private Podcast podcast;
 
     @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @ManyToOne

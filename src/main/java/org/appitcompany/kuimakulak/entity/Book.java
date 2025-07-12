@@ -17,7 +17,8 @@ public class Book {
     @Id
     @GeneratedValue(generator = "book_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "book_gen", sequenceName = "book_seq", allocationSize = 1, initialValue = 100)
-    private Long bookId;
+
+    private Long id;
     private String bookName;
     private String bannerUrl;
     private LocalDate publicationDate;
@@ -32,10 +33,10 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private List<Genre> genres;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "books")
     private Set<Contributor> contributors;
 
-    @OneToMany(mappedBy = "audio")
+    @OneToMany(mappedBy = "book")
     private List<Rating> ratings;
 
     @ManyToMany
@@ -50,7 +51,7 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<BookChapters> chapters;
 
-    @OneToOne
+    @OneToOne(mappedBy = "book")
     private Listeners listeners;
 
 }
