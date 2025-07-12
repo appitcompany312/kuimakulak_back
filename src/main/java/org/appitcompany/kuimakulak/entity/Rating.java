@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "audio_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "book_id"})})
 public class Rating {
     @Id
     @GeneratedValue(generator = "rating_gen", strategy = GenerationType.SEQUENCE)
@@ -20,7 +20,7 @@ public class Rating {
     private User user;
 
     @ManyToOne
-    private Book audio;
+    private Book book;
 
     @ManyToOne
     private Podcast podcast;

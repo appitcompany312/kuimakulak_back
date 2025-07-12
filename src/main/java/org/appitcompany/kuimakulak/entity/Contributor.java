@@ -23,6 +23,11 @@ public class Contributor {
     @Enumerated(EnumType.STRING)
     private ContributorRole role;
 
-    @ManyToMany(mappedBy = "contributors")
-    private Set<Book> audios;
+    @ManyToMany
+    @JoinTable(
+            name = "contributor_books",
+            joinColumns = @JoinColumn(name = "contributor_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> books;
 }

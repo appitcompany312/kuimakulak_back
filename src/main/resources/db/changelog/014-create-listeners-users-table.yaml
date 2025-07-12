@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14
+      author: nursultan
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: listeners_users
+      changes:
+        - createTable:
+            tableName: listeners_users
+            columns:
+              - column:
+                  name: listeners_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: listeners_id_fk
+                    referencedTableName: listeners
+                    referencedColumnNames: id
+              - column:
+                  name: users_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: users_id_fk
+                    referencedTableName: users
+                    referencedColumnNames: id

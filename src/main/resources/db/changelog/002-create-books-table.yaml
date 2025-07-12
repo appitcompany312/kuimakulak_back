@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: nursultan
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: books
+      changes:
+        - createSequence:
+              sequenceName: book_seq
+              startValue: 100
+              incrementBy: 1
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: is_bestseller
+                  type: boolean
+              - column:
+                  name: is_new
+                  type: boolean
+              - column:
+                  name: is_soon
+                  type: boolean
+              - column:
+                  name: is_sanat
+                  type: boolean
+              - column:
+                  name: page_count
+                  type: integer
+              - column:
+                  name: publication_date
+                  type: date
+              - column:
+                  name: banner_url
+                  type: varchar(1000)
+              - column:
+                  name: book_name
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: varchar(1000)
+              - column:
+                  name: publisher
+                  type: varchar(255)

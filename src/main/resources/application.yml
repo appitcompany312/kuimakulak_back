@@ -2,17 +2,21 @@ spring:
   application:
     name: KuimaKulak
   datasource:
-    url: jdbc:postgresql://localhost:5434/kuimakulak
-    username: prod_admin
-    password: pass123!
+    url: jdbc:postgresql://localhost:5432/kuima_kulak
+    username: postgres
+    password: nurs123
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  ## migration
+  liquibase:
+    change-log: db/changelog/main-changelog.yaml
+    enabled: true
 
 google:
   client-id: 492537232969-g2cdddrm2todlat6at2a7acp2nge5gas.apps.googleusercontent.com
@@ -43,7 +47,7 @@ apple:
   jwk-set-uri: https://appleid.apple.com/auth/keys
 
 server:
-  port: 8080
+  port: 8081
 
 logging:
   level:

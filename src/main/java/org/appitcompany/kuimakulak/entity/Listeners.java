@@ -22,6 +22,7 @@ public class Listeners {
     private int countListeners;
 
     @OneToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @OneToMany

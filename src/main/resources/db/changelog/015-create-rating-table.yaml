@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15
+      author: nursultan
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: rating
+      changes:
+        - createSequence:
+            sequenceName: rating_seq
+            startValue: 100
+            incrementBy: 1
+        - createTable:
+            tableName: rating
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: book_id_fk
+                    referencedTableName: books
+                    referencedColumnNames: id
+              - column:
+                  name: rating
+                  type: integer
+              - column:
+                  name: podcast_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: podcast_id_fk
+                    referencedTableName: podcasts
+                    referencedColumnNames: id
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_id_fk
+                    referencedTableName: users
+                    referencedColumnNames: id
+

@@ -18,7 +18,7 @@ public class Channel {
     @Id
     @GeneratedValue(generator = "channel_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "channel_gen", sequenceName = "channel_seq", allocationSize = 1, initialValue = 100)
-    private Long channelId;
+    private Long id;
     private String channelName;
     private String channelAuthor;
     @OneToMany(mappedBy ="channel")
