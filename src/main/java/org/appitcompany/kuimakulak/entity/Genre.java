@@ -20,5 +20,9 @@ public class Genre {
     private LocalDate addedDate;
 
     @ManyToMany
+    @JoinTable(
+            name = "genre_books",
+            joinColumns = @JoinColumn(name = "genre_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
     private List<Book> books;
 }

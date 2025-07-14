@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "book_id"})})
 @Table(name = "rating", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "audio_book_id"})})
 public class Rating {
     @Id
@@ -20,7 +21,7 @@ public class Rating {
     private User user;
 
     @ManyToOne
-    private Book audio;
+    private Book book;
 
     @ManyToOne
     private Podcast podcast;

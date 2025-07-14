@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: KuimaKulak
+  datasource:
+    url: jdbc:postgresql://localhost:5432/kuima_kulak
+    username: postgres
+    password: nurs123
+    driver-class-name: org.postgresql.Driver
