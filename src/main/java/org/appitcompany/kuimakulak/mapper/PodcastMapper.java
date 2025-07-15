@@ -9,7 +9,7 @@ public class PodcastMapper {
         PodcastDocument podcastDoc = new PodcastDocument();
      podcastDoc.setPodcastName(podcast.getPodcastName());
      podcastDoc.setDescription(podcast.getDescription());
-     podcastDoc.setPodcastId(podcast.getPodcastId());
+     podcastDoc.setPodcastId(podcast.getId());
      podcastDoc.setPublicationDate(podcast.getPublicationDate());
      podcastDoc.setBannerUrl(podcast.getBannerUrl());
      podcastDoc.setAudioUrl(podcast.getAudioUrl());

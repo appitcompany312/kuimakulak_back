@@ -15,7 +15,7 @@ public class BookMapper {
         bookDoc.setSanat(book.isSanat());
         bookDoc.setPageCount(book.getPageCount());
         bookDoc.setPublicationDate(book.getPublicationDate());
-        bookDoc.setBookId(book.getBookId());
+        bookDoc.setBookId(book.getId());
         bookDoc.setBannerUrl(book.getBannerUrl());
         bookDoc.setBookName(book.getBookName());
         bookDoc.setDescription(book.getDescription());

@@ -13,7 +13,7 @@ spring:
     change-log: db/changelog/main-changelog.yaml
     enabled: true
   profiles:
-    active: test
+    active: prod
 
 google:
   client-id: 492537232969-g2cdddrm2todlat6at2a7acp2nge5gas.apps.googleusercontent.com
