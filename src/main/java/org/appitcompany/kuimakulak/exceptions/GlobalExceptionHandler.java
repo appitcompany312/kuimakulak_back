@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
@@ -47,6 +48,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of(
                 "error", ex.getMessage()
         ));
+    }
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse notFound(NotFoundException notFoundException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.NOT_FOUND).
+                message(notFoundException.getMessage())
+                .build();
+    }
+    @ExceptionHandler(CustomAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ExceptionResponse alreadyExists( CustomAlreadyExistsException customAlreadyExistsException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.CONFLICT).
+                message(customAlreadyExistsException.getMessage())
+                .build();
     }
 
 }

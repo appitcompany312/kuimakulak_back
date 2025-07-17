@@ -2,6 +2,7 @@ package org.appitcompany.kuimakulak.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.entity.Book;
 import org.appitcompany.kuimakulak.entity.BookChapters;
@@ -9,6 +10,8 @@ import org.appitcompany.kuimakulak.entity.Contributor;
 import org.appitcompany.kuimakulak.entity.Genre;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
+import org.appitcompany.kuimakulak.mapper.BookMapper;
+import org.appitcompany.kuimakulak.repository.BookDocRepo;
 import org.appitcompany.kuimakulak.repository.BookRepo;
 import org.appitcompany.kuimakulak.repository.ContributorRepo;
 import org.appitcompany.kuimakulak.repository.GenreRepo;
@@ -25,6 +28,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepo bookRepo;
     private final ContributorRepo contributorRepo;
     private final GenreRepo genreRepo;
+    private final BookDocRepo bookDocRepo;
 
     @Override
     @Transactional
@@ -41,29 +45,31 @@ public class BookServiceImpl implements BookService {
         book.setPublicationDate(LocalDate.now());
         book.setPageCount(bookRequest.getPageCount());
         Book saveBook = bookRepo.save(book);
-        for (String name : bookRequest.getAuthorName()) {
-            Contributor author = contributorRepo.findByFullName(name);
-            if (author == null || !author.getRole().equals(ContributorRole.AUTHOR) ) {
-                throw new NotFoundException("Author not found! Add author first!!! " + name);
-            }
-            author.getBooks().add(saveBook);
-        }
+        bookRequest.getAuthorName().stream()
+                .map(author -> {
+                    Contributor author1 = contributorRepo.findByFullName(author);
+                    if (author1 == null || !author1.getRole().equals(ContributorRole.AUTHOR)) {
+                        throw new NotFoundException("Author not found! Add author first!!! " + author);
+                    }
+                    return author1;
+                }).forEach(author1 -> author1.getBooks().add(saveBook));
+
         bookRequest.getTranslatorName().stream()
-                        .map(translator->{
-                            Contributor translator1 = contributorRepo.findByFullName(translator);
-                            if (translator1 == null || !translator1.getRole().equals(ContributorRole.TRANSLATOR) ) {
-                                throw new NotFoundException("Translator not found! Add translator first!!! " + translator1);
-                            }
-                            return translator1;
-                        }).forEach(translator1 -> translator1.getBooks().add(saveBook));
+                .map(translator -> {
+                    Contributor translator1 = contributorRepo.findByFullName(translator);
+                    if (translator1 == null || !translator1.getRole().equals(ContributorRole.TRANSLATOR)) {
+                        throw new NotFoundException("Translator not found! Add translator first!!! " + translator1);
+                    }
+                    return translator1;
+                }).forEach(translator1 -> translator1.getBooks().add(saveBook));
         bookRequest.getNarratorName().stream()
-                        .map(narrator->{
-                            Contributor narrator1 = contributorRepo.findByFullName(narrator);
-                            if (narrator1 == null || !narrator1.getRole().equals(ContributorRole.NARRATOR) ) {
-                                throw new NotFoundException("Narrator not found! Add narrator first!!! " + narrator1);
-                            }
-                            return narrator1;
-                        }).forEach(narrator1-> narrator1.getBooks().add(saveBook));
+                .map(narrator -> {
+                    Contributor narrator1 = contributorRepo.findByFullName(narrator);
+                    if (narrator1 == null || !narrator1.getRole().equals(ContributorRole.NARRATOR)) {
+                        throw new NotFoundException("Narrator not found! Add narrator first!!! " + narrator1);
+                    }
+                    return narrator1;
+                }).forEach(narrator1 -> narrator1.getBooks().add(saveBook));
         bookRequest.getGenreName().stream()
                 .map(genreName -> {
                     Genre genre = genreRepo.findByGenreName(genreName);
@@ -79,6 +85,8 @@ public class BookServiceImpl implements BookService {
         bookChapters.setChapterNumber(bookRequest.getChapterNumber());
         bookChapters.setAudioUrl(bookRequest.getAudioUrl());
 
+        BookDocument bookDocument = BookMapper.toBookDocument(saveBook);
+        bookDocRepo.save(bookDocument);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("book has been saved successfully");

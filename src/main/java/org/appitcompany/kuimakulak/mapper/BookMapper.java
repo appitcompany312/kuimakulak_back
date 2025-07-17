@@ -1,7 +1,13 @@
 package org.appitcompany.kuimakulak.mapper;
 
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.entity.*;
+
+import java.util.List;
+import java.util.Set;
 
 public class BookMapper {
     public static BookDocument toBookDocument(Book book) {
@@ -10,9 +16,10 @@ public class BookMapper {
         bookDoc.setBestseller(book.isBestseller());
         bookDoc.setNew(book.isNew());
         bookDoc.setSanat(book.isSanat());
+        bookDoc.setSoon(book.isSoon());
         bookDoc.setPageCount(book.getPageCount());
         bookDoc.setPublicationDate(book.getPublicationDate());
-        bookDoc.setBookId(book.getId());
+        bookDoc.setId(book.getId());
         bookDoc.setBannerUrl(book.getBannerUrl());
         bookDoc.setBookName(book.getBookName());
         bookDoc.setDescription(book.getDescription());

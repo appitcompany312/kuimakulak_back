@@ -67,7 +67,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login/**", "/api/auth/token/refresh").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/oauth2/code/*").permitAll()
+                        .requestMatchers("/oauth2/**",
+                                "api/book/save",
+                                "api/genre/save",
+                                "api/contributor/save",
+                                "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
