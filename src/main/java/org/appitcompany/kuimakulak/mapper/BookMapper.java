@@ -1,10 +1,7 @@
 package org.appitcompany.kuimakulak.mapper;
 
 import org.appitcompany.kuimakulak.document.BookDocument;
-import org.appitcompany.kuimakulak.entity.Book;
-import org.appitcompany.kuimakulak.entity.BookChapters;
-import org.appitcompany.kuimakulak.entity.Genre;
-import org.appitcompany.kuimakulak.entity.Rating;
+import org.appitcompany.kuimakulak.entity.*;
 
 public class BookMapper {
     public static BookDocument toBookDocument(Book book) {
@@ -27,7 +24,7 @@ public class BookMapper {
                 .map(Genre::getGenreName).toList());
 
         bookDoc.setContributors(book.getContributors().stream()
-                .map(c->c.getFirstName()+" "+c.getLastName()).toList());
+                .map(Contributor::getFullName).toList());
 
         bookDoc.setChapterNames(book.getChapters().stream()
                 .map(BookChapters::getChapterName).toList());
