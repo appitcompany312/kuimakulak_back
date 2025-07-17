@@ -1,9 +1,11 @@
 package org.appitcompany.kuimakulak.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.contributorDto.ContributorRequest;
 import org.appitcompany.kuimakulak.service.ContributorService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ContributorController {
     private final ContributorService contributorService;
+    //   @Secured("ADMIN")
+    @Operation(summary = "save  contributor",description = "only admins can add  contributors")
+    @PostMapping("/save")
     public ResponseEntity<?> saveContributor(ContributorRequest contributorRequest) {
         return contributorService.saveContributor(contributorRequest);
     }

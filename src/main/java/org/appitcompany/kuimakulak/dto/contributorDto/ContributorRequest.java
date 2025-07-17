@@ -8,10 +8,10 @@ import org.appitcompany.kuimakulak.enums.ContributorRole;
 @Getter
 @Setter
 public class ContributorRequest {
-    @NotEmpty(message = "поле full name не должен быть пустым")
+    @NotEmpty(message = "the full name field must not be empty")
     @Size(max = 500 , message = "максимум 500 символов  ")
     private String fullName;
-    @NotEmpty(message = "поле role  не должен быть пустым")
-    @Size(max = 50 , message = "максимум 50 символов  ")
+    @NotEmpty(message = "the role field must not be empty")
+    @Size(max = 50 , message = "max 50 characters ")
     private ContributorRole role;
 }

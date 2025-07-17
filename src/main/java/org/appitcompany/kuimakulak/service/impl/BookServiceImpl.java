@@ -4,24 +4,27 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.entity.Book;
+import org.appitcompany.kuimakulak.entity.BookChapters;
 import org.appitcompany.kuimakulak.entity.Contributor;
+import org.appitcompany.kuimakulak.entity.Genre;
+import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.repository.BookRepo;
 import org.appitcompany.kuimakulak.repository.ContributorRepo;
+import org.appitcompany.kuimakulak.repository.GenreRepo;
 import org.appitcompany.kuimakulak.service.BookService;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
- private final BookRepo bookRepo;
- private final ContributorRepo contributorRepo;
+    private final BookRepo bookRepo;
+    private final ContributorRepo contributorRepo;
+    private final GenreRepo genreRepo;
 
     @Override
     @Transactional
@@ -38,18 +41,46 @@ public class BookServiceImpl implements BookService {
         book.setPublicationDate(LocalDate.now());
         book.setPageCount(bookRequest.getPageCount());
         Book saveBook = bookRepo.save(book);
-        for (String name : bookRequest.getContributors()) {
-         Contributor contributor =contributorRepo.findByFullName(name);
-         if(contributor==null){throw new NotFoundException("Contributor not found! Add contributor first!!!");
-         }
-         contributor.getBooks().add(saveBook);
+        for (String name : bookRequest.getAuthorName()) {
+            Contributor author = contributorRepo.findByFullName(name);
+            if (author == null || !author.getRole().equals(ContributorRole.AUTHOR) ) {
+                throw new NotFoundException("Author not found! Add author first!!! " + name);
+            }
+            author.getBooks().add(saveBook);
         }
-//        private List<String> genreName;
-//        private Set<String> contributors;
-//        private String chapterName;
-//        private String chapterNumber;
-//        private String audioUrl;
+        bookRequest.getTranslatorName().stream()
+                        .map(translator->{
+                            Contributor translator1 = contributorRepo.findByFullName(translator);
+                            if (translator1 == null || !translator1.getRole().equals(ContributorRole.TRANSLATOR) ) {
+                                throw new NotFoundException("Translator not found! Add translator first!!! " + translator1);
+                            }
+                            return translator1;
+                        }).forEach(translator1 -> translator1.getBooks().add(saveBook));
+        bookRequest.getNarratorName().stream()
+                        .map(narrator->{
+                            Contributor narrator1 = contributorRepo.findByFullName(narrator);
+                            if (narrator1 == null || !narrator1.getRole().equals(ContributorRole.NARRATOR) ) {
+                                throw new NotFoundException("Narrator not found! Add narrator first!!! " + narrator1);
+                            }
+                            return narrator1;
+                        }).forEach(narrator1-> narrator1.getBooks().add(saveBook));
+        bookRequest.getGenreName().stream()
+                .map(genreName -> {
+                    Genre genre = genreRepo.findByGenreName(genreName);
+                    if (genre == null) {
+                        throw new NotFoundException("Genre not found! Add genre first!!! " + genreName);
+                    }
+                    return genre;
+                }).forEach(genre -> genre.getBooks().add(saveBook));
 
-        return null;
+        BookChapters bookChapters = new BookChapters();
+        bookChapters.setBook(saveBook);
+        bookChapters.setChapterName(bookRequest.getChapterName());
+        bookChapters.setChapterNumber(bookRequest.getChapterNumber());
+        bookChapters.setAudioUrl(bookRequest.getAudioUrl());
+
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("book has been saved successfully");
     }
 }
