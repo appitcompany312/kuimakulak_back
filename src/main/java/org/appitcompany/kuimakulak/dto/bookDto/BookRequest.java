@@ -1,5 +1,6 @@
 package org.appitcompany.kuimakulak.dto.bookDto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -18,9 +19,13 @@ public class BookRequest {
     private Integer pageCount;
     private String description;
     private String publisher;
+    @Schema(defaultValue= "false")
     private boolean isSoon;
+    @Schema(defaultValue= "false")
     private boolean isNew;
+    @Schema(defaultValue= "false")
     private boolean isSanat;
+    @Schema(defaultValue= "false")
     private boolean isBestseller;
     private Set<String> genreName= new HashSet<>();
     @NotEmpty(message = "the authorName field must not be empty")

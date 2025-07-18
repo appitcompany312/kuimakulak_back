@@ -3,10 +3,15 @@ package org.appitcompany.kuimakulak.document;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Document(indexName = "books")
 @Getter
@@ -16,7 +21,8 @@ public class BookDocument {
     private Long id;
     private String bookName;
     private String bannerUrl;
-    private LocalDate publicationDate;
+    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
+    private Long publicationDate;
     private Integer pageCount;
     private String description;
     private String publisher;
@@ -24,11 +30,11 @@ public class BookDocument {
     private boolean isNew;
     private boolean isSanat;
     private boolean isBestseller;
-    private List<String> genres;
-    private List<String> contributors;
+    private List<String> genres = new ArrayList<>();
+    private List<String> contributors = new ArrayList<>();
     private Double averageRating;
     private Integer favoriteCount;
     private Integer listenerCount;
-    private List<String> chapterNames;
-
+    private List<String> chapterNames = new ArrayList<>();
+    private Set<Long> userIds  = new HashSet<>();
 }
