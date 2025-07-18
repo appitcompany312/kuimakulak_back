@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,27 +33,27 @@ public class Book {
     private boolean isBestseller;
 
     @ManyToMany(mappedBy = "books")
-    private List<Genre> genres;
+    private List<Genre> genres = new ArrayList<>();
 
     @ManyToMany(mappedBy = "books")
-    private Set<Contributor> contributors;
+    private Set<Contributor> contributors = new HashSet<>();
 
     @OneToMany(mappedBy = "book")
-    private List<Rating> ratings;
+    private List<Rating> ratings  = new ArrayList<>();
 
     @ManyToMany
-    private List<User> users;
+    private List<User> users  = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
-    private List<Favorite> favorites;
+    private List<Favorite> favorites   = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
-    private List<History> historys;
+    private List<History> historys   = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
-    private List<BookChapters> chapters;
+    private List<BookChapters> chapters   = new ArrayList<>();
 
-    @OneToOne(mappedBy = "book")
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Listeners listeners;
 
 }

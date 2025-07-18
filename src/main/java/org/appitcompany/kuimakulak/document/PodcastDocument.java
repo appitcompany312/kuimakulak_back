@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Setter
 public class PodcastDocument {
     @Id
-    private Long podcastId;
+    private Long id;
     private String podcastName;
     private String description;
     private String audioUrl;

@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class BookDocument {
     @Id
-    private Long bookId;
+    private Long id;
     private String bookName;
     private String bannerUrl;
     private LocalDate publicationDate;
@@ -30,4 +30,5 @@ public class BookDocument {
     private Integer favoriteCount;
     private Integer listenerCount;
     private List<String> chapterNames;
+
 }

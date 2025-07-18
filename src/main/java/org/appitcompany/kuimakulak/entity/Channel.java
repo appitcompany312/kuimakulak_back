@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,5 +23,5 @@ public class Channel {
     private String channelName;
     private String channelAuthor;
     @OneToMany(mappedBy ="channel")
-    private List<Podcast> podcasts;
+    private List<Podcast> podcasts  = new ArrayList<>();
 }
