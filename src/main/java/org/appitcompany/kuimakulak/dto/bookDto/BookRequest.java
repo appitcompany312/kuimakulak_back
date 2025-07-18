@@ -2,13 +2,13 @@ package org.appitcompany.kuimakulak.dto.bookDto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-import java.util.List;
+import lombok.Data;
+
+import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+
+@Data
 public class BookRequest {
     @NotEmpty(message = "the bookName field must not be empty")
     private String bookName;
@@ -22,11 +22,12 @@ public class BookRequest {
     private boolean isNew;
     private boolean isSanat;
     private boolean isBestseller;
-    private List<String> genreName;
+    private Set<String> genreName= new HashSet<>();
     @NotEmpty(message = "the authorName field must not be empty")
-    private Set<String> authorName;
-    private Set<String> translatorName;
-    private Set<String> narratorName;
+    private Set<String> authorName = new HashSet<>();
+    @NotEmpty(message = "the publisher field must not be empty")
+    private Set<String> translatorName= new HashSet<>();
+    private Set<String> narratorName= new HashSet<>();
     @NotEmpty(message = "the chapterName field must not be empty")
     private String chapterName;
     @NotEmpty(message = "the chapterNumber field must not be empty")

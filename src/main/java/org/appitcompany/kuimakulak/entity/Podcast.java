@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -29,11 +30,11 @@ public class Podcast {
     private Channel channel;
 
     @OneToMany(mappedBy = "podcast")
-    private List<Rating> ratings;
+    private List<Rating> ratings  = new ArrayList<>();
 
     @OneToMany(mappedBy = "podcast")
-    private List<Favorite> favorites;
+    private List<Favorite> favorites = new ArrayList<>();
 
     @OneToMany(mappedBy = "podcast")
-    private  List<History> history;
+    private  List<History> history  = new ArrayList<>();
 }

@@ -6,6 +6,7 @@ import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,7 @@ public class BookController {
 //   @Secured("ADMIN")
     @Operation(summary = "save book",description = "only admins can add books")
    @PostMapping("/save")
-    public ResponseEntity<?> saveBook(BookRequest bookRequest){
+    public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
         return bookService.saveBook(bookRequest);
     }
 }

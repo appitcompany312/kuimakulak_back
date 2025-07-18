@@ -7,6 +7,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface ContributorRepo extends JpaRepository<Contributor,Long> {
     @Query("SELECT c FROM Contributor c WHERE c.fullName = :name")
-    Contributor findByFullName(@Param("name") String name);
-
+    Contributor findByName(@Param("name") String name);
 }

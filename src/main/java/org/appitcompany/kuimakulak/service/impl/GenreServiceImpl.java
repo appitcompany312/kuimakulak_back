@@ -18,7 +18,7 @@ public class GenreServiceImpl implements GenreService {
     private final GenreRepo genreRepo;
     @Override
     public ResponseEntity<?> saveGenre(GenreRequest genreRequest) {
-        Genre byGenreName = genreRepo.findByGenreName(genreRequest.getGenreName());
+        Genre byGenreName = genreRepo.findByName(genreRequest.getGenreName());
         if (byGenreName != null) {
             throw new CustomAlreadyExistsException(" This genre already exists in the database!");}
         Genre genre = new Genre();
