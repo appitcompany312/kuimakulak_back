@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers("/oauth2/**",
                                 "api/book/save",
                                 "api/genre/save",
+                                "api/book/getBookForGenre",
                                 "api/contributor/save",
                                 "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()

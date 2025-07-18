@@ -1,13 +1,11 @@
 package org.appitcompany.kuimakulak.mapper;
 
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.entity.*;
 
-import java.util.List;
-import java.util.Set;
+import java.time.ZoneId;
+import java.util.stream.Collectors;
 
 public class BookMapper {
     public static BookDocument toBookDocument(Book book) {
@@ -18,12 +16,13 @@ public class BookMapper {
         bookDoc.setSanat(book.isSanat());
         bookDoc.setSoon(book.isSoon());
         bookDoc.setPageCount(book.getPageCount());
-        bookDoc.setPublicationDate(book.getPublicationDate());
+        bookDoc.setPublicationDate(book.getPublicationDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
         bookDoc.setId(book.getId());
         bookDoc.setBannerUrl(book.getBannerUrl());
         bookDoc.setBookName(book.getBookName());
         bookDoc.setDescription(book.getDescription());
         bookDoc.setPublisher(book.getPublisher());
+
 
         bookDoc.setListenerCount(book.getListeners().getCountListeners());
 
@@ -32,11 +31,12 @@ public class BookMapper {
 
         bookDoc.setContributors(book.getContributors().stream()
                 .map(Contributor::getFullName).toList());
-
         bookDoc.setChapterNames(book.getChapters().stream()
                 .map(BookChapters::getChapterName).toList());
 
         bookDoc.setFavoriteCount(book.getFavorites().size());
+
+        bookDoc.setUserIds(book.getUsers().stream().map(User::getId).collect(Collectors.toSet()));
 
         if (book.getRatings() != null && !book.getRatings().isEmpty()) {
             double avg = book.getRatings().stream()
