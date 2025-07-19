@@ -22,20 +22,44 @@ public class BookController {
         return bookService.saveBook(bookRequest);
     }
 //    @Secured("USER")
-    @GetMapping("/getBookForGenre")
+    @GetMapping("/getBookByGenre")
     @Operation(summary = "get books by genre",description = "only user can search")
-    public PaginationResponse<BookResponse> getBookForGenre(
+    public PaginationResponse<BookResponse> getBookByGenre(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize,
             @RequestParam String genreName){
         return bookService.getBookForGenre(genreName,pageNumber,pageSize);
     }
-    //    @Secured("USER")
+
     @GetMapping("/getBookIsSoon")
     @Operation(summary = "get books by is soon",description = "only user can search")
     public PaginationResponse<BookResponse> getBookIsSoon(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBookIsSoon(pageNumber,pageSize);
+    }
+    //    @Secured("USER")
+    @GetMapping("/getBookIsNew")
+    @Operation(summary = "get books by is new",description = "only user can search")
+    public PaginationResponse<BookResponse> getBookIsNew(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize){
+        return bookService.getBookIsNew(pageNumber,pageSize);
+    }
+    //    @Secured("USER")
+    @GetMapping("/getBookIsBestseller")
+    @Operation(summary = "get books by is bestseller",description = "only user can search")
+    public PaginationResponse<BookResponse> getBookIsBestseller(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize){
+        return bookService.getBookIsBestseller(pageNumber,pageSize);
+    }
+    //    @Secured("USER")
+    @GetMapping("/getBooksRecommendation")
+    @Operation(summary = "get books recommendation",description = "only user can search")
+    public PaginationResponse<BookResponse> getBooksRecommendation(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize){
+        return bookService.getBooksRecommendation(pageNumber,pageSize);
     }
 }

@@ -12,5 +12,10 @@ public interface BookDocRepo extends ElasticsearchRepository<BookDocument,Long> 
 
     List<BookDocument> findByGenres(List<String> genres);
 
+    List<BookDocument> findByIsBestseller(boolean bestseller);
+
+    List<BookDocument> findByIsNew(boolean aNew);
+
+
     List<BookDocument> findByIsSoon(boolean b);
 }
