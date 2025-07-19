@@ -68,10 +68,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login/**", "/api/auth/token/refresh").permitAll()
                         .requestMatchers("/oauth2/**",
-                                "api/book/save",
-                                "api/genre/save",
-                                "api/book/getBookForGenre",
-                                "api/contributor/save",
+                                "api/book/save",//delete later
+                                "api/genre/save",//delete later
+                                "api/book/getBookIsSoon",//delete later
+                                "api/book/getBookForGenre",//delete later
+                                "api/contributor/save",//delete later
                                 "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()

@@ -23,10 +23,19 @@ public class BookController {
     }
 //    @Secured("USER")
     @GetMapping("/getBookForGenre")
+    @Operation(summary = "get books by genre",description = "only user can search")
     public PaginationResponse<BookResponse> getBookForGenre(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize,
             @RequestParam String genreName){
         return bookService.getBookForGenre(genreName,pageNumber,pageSize);
+    }
+    //    @Secured("USER")
+    @GetMapping("/getBookIsSoon")
+    @Operation(summary = "get books by is soon",description = "only user can search")
+    public PaginationResponse<BookResponse> getBookIsSoon(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize){
+        return bookService.getBookIsSoon(pageNumber,pageSize);
     }
 }

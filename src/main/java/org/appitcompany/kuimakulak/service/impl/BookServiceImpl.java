@@ -12,6 +12,7 @@ import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
 import org.appitcompany.kuimakulak.repository.*;
 import org.appitcompany.kuimakulak.service.BookService;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,7 @@ public class BookServiceImpl implements BookService {
     private final BookDocRepo bookDocRepo;
     private final BookChaptersRepo bookChaptersRepo;
     private final ListenersRepo listenersRepo;
-
+    private final ElasticsearchOperations elasticsearchOperations;
     @Override
     @Transactional
     public ResponseEntity<?> saveBook(BookRequest bookRequest) {
@@ -121,11 +123,16 @@ public class BookServiceImpl implements BookService {
         List<BookDocument> allBooks = bookDocRepo.findByGenres(genres).stream()
                 .filter(book -> !book.isSoon())
                 .toList();
-
-        int totalElements = allBooks.size();
+        if (allBooks.isEmpty()) {
+            throw new NotFoundException("Soon document not found!");
+        }
+        List<BookDocument> sortedByDateDesc = allBooks.stream()
+                .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
+                .toList();
+        int totalElements = sortedByDateDesc.size();
         int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
 
-        List<BookDocument> pagedBooks = allBooks.stream()
+        List<BookDocument> pagedBooks = sortedByDateDesc.stream()
                 .skip(offset)
                 .limit(pageSize)
                 .toList();
@@ -138,9 +145,7 @@ public class BookServiceImpl implements BookService {
                     response.setBanner_url(doc.getBannerUrl());
                     response.setRating(doc.getAverageRating());
                     response.setGenreName(doc.getGenres());
-                    response.setAuthor((doc.getContributors() != null && !doc.getContributors().isEmpty())
-                            ? doc.getContributors().get(0)
-                            : "Автор жок");
+                    response.setAuthor(doc.getAuthors());
                     response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
                             .atZone(ZoneId.systemDefault())
                             .toLocalDate());
@@ -159,4 +164,51 @@ public class BookServiceImpl implements BookService {
                 .content(responses)
                 .build();
     }
+
+    @Override
+    public PaginationResponse<BookResponse> getBookIsSoon(int pageNumber, int pageSize) {
+
+        int offset = (pageNumber - 1) * pageSize;
+
+        List<BookDocument> bySoon = bookDocRepo.findByIsSoon(true);
+        if (bySoon == null || bySoon.isEmpty()) {
+            throw new NotFoundException("Soon document not found!");
+        }
+        List<BookDocument> sortedByDateDesc = bySoon.stream()
+                .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
+                .toList();
+        int totalElements = sortedByDateDesc.size();
+        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
+
+        List<BookDocument> pagedBooks = sortedByDateDesc.stream()
+                .skip(offset)
+                .limit(pageSize)
+                .toList();
+
+        List<BookResponse> responses = pagedBooks.stream()
+                .map(doc -> {
+                    BookResponse response = new BookResponse();
+                    response.setId(doc.getId());
+                    response.setBookName(doc.getBookName());
+                    response.setBanner_url(doc.getBannerUrl());
+                    response.setRating(doc.getAverageRating());
+                    response.setGenreName(doc.getGenres());
+                    response.setAuthor(doc.getAuthors());
+                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
+                    response.setHistory(false);
+                    return response;
+                })
+                .toList();
+
+        return PaginationResponse.<BookResponse>builder()
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .content(responses)
+                .build();
+    }
+
 }
