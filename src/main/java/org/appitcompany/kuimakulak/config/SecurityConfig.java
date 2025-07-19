@@ -72,6 +72,9 @@ public class SecurityConfig {
                                 "api/genre/save",//delete later
                                 "api/book/getBookIsSoon",//delete later
                                 "api/book/getBookForGenre",//delete later
+                                "api/book/getBookIsBestseller",//delete later
+                                "api/book/getBookIsNew",//delete later
+                                "api/book/getBooksRecommendation",//delete later
                                 "api/contributor/save",//delete later
                                 "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()

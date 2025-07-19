@@ -11,4 +11,10 @@ public interface BookService {
     PaginationResponse<BookResponse> getBookForGenre(String genreName, int pageNumber, int pageSize);
 
     PaginationResponse<BookResponse> getBookIsSoon(int pageNumber, int pageSize);
+
+    PaginationResponse<BookResponse> getBookIsNew(int pageNumber, int pageSize);
+
+    PaginationResponse<BookResponse> getBookIsBestseller(int pageNumber, int pageSize);
+
+    PaginationResponse<BookResponse> getBooksRecommendation(int pageNumber, int pageSize);
 }
