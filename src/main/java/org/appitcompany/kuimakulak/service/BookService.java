@@ -9,4 +9,6 @@ public interface BookService {
     ResponseEntity<?> saveBook(BookRequest bookRequest);
 
     PaginationResponse<BookResponse> getBookForGenre(String genreName, int pageNumber, int pageSize);
+
+    PaginationResponse<BookResponse> getBookIsSoon(int pageNumber, int pageSize);
 }

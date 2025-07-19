@@ -3,6 +3,7 @@ package org.appitcompany.kuimakulak.mapper;
 
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.entity.*;
+import org.appitcompany.kuimakulak.enums.ContributorRole;
 
 import java.time.ZoneId;
 import java.util.stream.Collectors;
@@ -29,8 +30,28 @@ public class BookMapper {
         bookDoc.setGenres(book.getGenres().stream()
                 .map(Genre::getGenreName).toList());
 
-        bookDoc.setContributors(book.getContributors().stream()
-                .map(Contributor::getFullName).toList());
+        bookDoc.setAuthors(
+                book.getContributors()
+                        .stream()
+                        .filter(contributor -> contributor.getRole() == ContributorRole.AUTHOR)
+                        .map(Contributor::getFullName)
+                        .collect(Collectors.toList())
+        );
+        bookDoc.setTranslators(
+                book.getContributors()
+                        .stream()
+                        .filter(contributor -> contributor.getRole() == ContributorRole.TRANSLATOR)
+                        .map(Contributor::getFullName)
+                        .collect(Collectors.toList())
+        );
+        bookDoc.setNarrators(
+                book.getContributors()
+                        .stream()
+                        .filter(contributor -> contributor.getRole() == ContributorRole.NARRATOR)
+                        .map(Contributor::getFullName)
+                        .collect(Collectors.toList())
+        );
+
         bookDoc.setChapterNames(book.getChapters().stream()
                 .map(BookChapters::getChapterName).toList());
 

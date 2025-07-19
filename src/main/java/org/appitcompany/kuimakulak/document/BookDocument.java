@@ -31,7 +31,10 @@ public class BookDocument {
     private boolean isSanat;
     private boolean isBestseller;
     private List<String> genres = new ArrayList<>();
-    private List<String> contributors = new ArrayList<>();
+    private List<String> authors = new ArrayList<>();
+    private List<String> translators = new ArrayList<>();
+    private List<String> narrators = new ArrayList<>();
+    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Double averageRating;
     private Integer favoriteCount;
     private Integer listenerCount;

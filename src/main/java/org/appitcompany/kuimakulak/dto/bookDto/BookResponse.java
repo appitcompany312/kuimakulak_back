@@ -13,7 +13,7 @@ public class BookResponse {
     private List<String> genreName;
     private String bookName;
     private String banner_url;
-    private String author;
+    private List<String> author;
     private Double rating;
     private boolean isHistory;
     private LocalDate publicationDate;

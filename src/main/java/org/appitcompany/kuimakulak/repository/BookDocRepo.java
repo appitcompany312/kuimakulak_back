@@ -11,4 +11,6 @@ import java.util.List;
 public interface BookDocRepo extends ElasticsearchRepository<BookDocument,Long> {
 
     List<BookDocument> findByGenres(List<String> genres);
+
+    List<BookDocument> findByIsSoon(boolean b);
 }
