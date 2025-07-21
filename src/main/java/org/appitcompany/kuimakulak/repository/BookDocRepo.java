@@ -18,4 +18,6 @@ public interface BookDocRepo extends ElasticsearchRepository<BookDocument,Long> 
 
 
     List<BookDocument> findByIsSoon(boolean b);
+
+    List<BookDocument> findByIsSanat(boolean b);
 }

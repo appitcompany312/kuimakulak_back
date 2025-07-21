@@ -1,11 +1,19 @@
 package org.appitcompany.kuimakulak.repository;
 
 import org.appitcompany.kuimakulak.entity.Contributor;
+import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ContributorRepo extends JpaRepository<Contributor,Long> {
-    @Query("SELECT c FROM Contributor c WHERE c.fullName = :name")
-    Contributor findByName(@Param("name") String name);
+import java.util.List;
+
+public interface ContributorRepo extends JpaRepository<Contributor, Long> {
+
+    List<Contributor> findByFullName(String fullName);
+
+    @Query("SELECT c FROM Contributor c WHERE c.fullName = :translator AND c.role=:contributorRole")
+    Contributor findByFullNameAndRole(@Param("translator")String translator,@Param("contributorRole") ContributorRole contributorRole);
 }
+
+

@@ -57,7 +57,10 @@ public class BookMapper {
 
         bookDoc.setFavoriteCount(book.getFavorites().size());
 
-        bookDoc.setUserIds(book.getUsers().stream().map(User::getId).collect(Collectors.toSet()));
+        bookDoc.setUserIds(book.getFavorites().stream().map(Favorite::getUser)
+                        .map(User::getId)
+        .collect(Collectors.toSet()));
+
 
         if (book.getRatings() != null && !book.getRatings().isEmpty()) {
             double avg = book.getRatings().stream()
