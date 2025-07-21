@@ -12,7 +12,6 @@ import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
 import org.appitcompany.kuimakulak.repository.*;
 import org.appitcompany.kuimakulak.service.BookService;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +23,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,8 +50,8 @@ public class BookServiceImpl implements BookService {
         book.setPageCount(bookRequest.getPageCount());
         Book saveBook = bookRepo.save(book);
         for (String author : bookRequest.getAuthorName()) {
-            Contributor author1 = contributorRepo.findByName(author);
-            if (author1 == null || !author1.getRole().equals(ContributorRole.AUTHOR)) {
+            Contributor author1 = contributorRepo.findByFullNameAndRole(author, ContributorRole.AUTHOR);
+            if (author1 == null) {
                 throw new NotFoundException("Author not found! Add author first!!! " + author);
             }
             saveBook.getContributors().add(author1);
@@ -61,8 +59,8 @@ public class BookServiceImpl implements BookService {
         }
         bookRequest.getTranslatorName().stream()
                 .map(translator -> {
-                    Contributor translator1 = contributorRepo.findByName(translator);
-                    if (translator1 == null || !translator1.getRole().equals(ContributorRole.TRANSLATOR)) {
+                    Contributor translator1 = contributorRepo.findByFullNameAndRole(translator, ContributorRole.TRANSLATOR);
+                    if (translator1 == null) {
                         throw new NotFoundException("Translator not found! Add translator first!!! " + translator1);
                     }
                     saveBook.getContributors().add(translator1);
@@ -70,8 +68,8 @@ public class BookServiceImpl implements BookService {
                 }).forEach(translator1 -> translator1.getBooks().add(saveBook));
         bookRequest.getNarratorName().stream()
                 .map(narrator -> {
-                    Contributor narrator1 = contributorRepo.findByName(narrator);
-                    if (narrator1 == null || !narrator1.getRole().equals(ContributorRole.NARRATOR)) {
+                    Contributor narrator1 = contributorRepo.findByFullNameAndRole(narrator, ContributorRole.NARRATOR);
+                    if (narrator1 == null) {
                         throw new NotFoundException("Narrator not found! Add narrator first!!! " + narrator1);
                     }
                     saveBook.getContributors().add(narrator1);
@@ -115,60 +113,19 @@ public class BookServiceImpl implements BookService {
     public PaginationResponse<BookResponse> getBookForGenre(String genreName, int pageNumber, int pageSize) {
         List<String> genres = new ArrayList<>();
         genres.add(genreName);
-        int offset = (pageNumber - 1) * pageSize;
-//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new NotFoundException("User not found!"));
+//        User user = getCurrentUser();
         List<BookDocument> allBooks = bookDocRepo.findByGenres(genres).stream()
                 .filter(book -> !book.isSoon())
+                .sorted(Comparator.comparing(BookDocument::getPublicationDate).reversed())
                 .toList();
         if (allBooks.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-        List<BookDocument> sortedByDateDesc = allBooks.stream()
-                .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
-                .toList();
-        int totalElements = sortedByDateDesc.size();
-        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
-
-        List<BookDocument> pagedBooks = sortedByDateDesc.stream()
-                .skip(offset)
-                .limit(pageSize)
-                .toList();
-
-        List<BookResponse> responses = pagedBooks.stream()
-                .map(doc -> {
-                    BookResponse response = new BookResponse();
-                    response.setId(doc.getId());
-                    response.setBookName(doc.getBookName());
-                    response.setBanner_url(doc.getBannerUrl());
-                    response.setRating(doc.getAverageRating());
-                    response.setGenreName(doc.getGenres());
-                    response.setAuthor(doc.getAuthors());
-                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
-                    Long currentUserId =1L;
-                    boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
-                    response.setHistory(isHistory);
-                    return response;
-                })
-                .toList();
-
-        return PaginationResponse.<BookResponse>builder()
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .content(responses)
-                .build();
+        return buildPaginationResponse(allBooks,pageNumber,pageSize, 1L);
     }
 
     @Override
     public PaginationResponse<BookResponse> getBookIsSoon(int pageNumber, int pageSize) {
-
-        int offset = (pageNumber - 1) * pageSize;
-
         List<BookDocument> list = bookDocRepo.findByIsSoon(true).stream()
                 .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
                 .toList();
@@ -176,47 +133,12 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-
-        int totalElements = list.size();
-        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
-
-        List<BookDocument> pagedBooks = list.stream()
-                .skip(offset)
-                .limit(pageSize)
-                .toList();
-
-        List<BookResponse> responses = pagedBooks.stream()
-                .map(doc -> {
-                    BookResponse response = new BookResponse();
-                    response.setId(doc.getId());
-                    response.setBookName(doc.getBookName());
-                    response.setBanner_url(doc.getBannerUrl());
-                    response.setRating(doc.getAverageRating());
-                    response.setGenreName(doc.getGenres());
-                    response.setAuthor(doc.getAuthors());
-                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
-                    response.setHistory(false);
-                    return response;
-                })
-                .toList();
-
-        return PaginationResponse.<BookResponse>builder()
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .content(responses)
-                .build();
+        return buildPaginationResponse(list,pageNumber,pageSize,0L);
     }
 
     @Override
     public PaginationResponse<BookResponse> getBookIsNew(int pageNumber, int pageSize) {
-        //        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new NotFoundException("User not found!"));
-        int offset = (pageNumber - 1) * pageSize;
+//        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsNew(true).stream()
                 .filter(book -> !book.isSoon())
                 .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
@@ -224,51 +146,12 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("New document not found!");
         }
-
-        int totalElements = list.size();
-        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
-
-        List<BookDocument> pagedBooks = list.stream()
-                .skip(offset)
-                .limit(pageSize)
-                .toList();
-
-        List<BookResponse> responses = pagedBooks.stream()
-                .map(doc -> {
-                    BookResponse response = new BookResponse();
-                    response.setId(doc.getId());
-                    response.setBookName(doc.getBookName());
-                    response.setBanner_url(doc.getBannerUrl());
-                    response.setRating(doc.getAverageRating());
-                    response.setGenreName(doc.getGenres());
-                    response.setAuthor(doc.getAuthors());
-                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
-                    Long currentUserId =1L;
-                    boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
-                    response.setHistory(isHistory);
-                    return response;
-                })
-                .toList();
-
-        return PaginationResponse.<BookResponse>builder()
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .content(responses)
-                .build();
-
+  return buildPaginationResponse(list, pageNumber, pageSize,1L);
     }
 
     @Override
     public PaginationResponse<BookResponse> getBookIsBestseller(int pageNumber, int pageSize) {
-        //        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new NotFoundException("User not found!"));
-        int offset = (pageNumber - 1) * pageSize;
-
+//        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsBestseller(true).stream()
                 .filter(book -> !book.isSoon())
                 .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
@@ -276,49 +159,12 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-
-        int totalElements = list.size();
-        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
-
-        List<BookDocument> pagedBooks = list.stream()
-                .skip(offset)
-                .limit(pageSize)
-                .toList();
-
-        List<BookResponse> responses = pagedBooks.stream()
-                .map(doc -> {
-                    BookResponse response = new BookResponse();
-                    response.setId(doc.getId());
-                    response.setBookName(doc.getBookName());
-                    response.setBanner_url(doc.getBannerUrl());
-                    response.setRating(doc.getAverageRating());
-                    response.setGenreName(doc.getGenres());
-                    response.setAuthor(doc.getAuthors());
-                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
-                    Long currentUserId =1L;
-                    boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
-                    response.setHistory(isHistory);
-                    return response;
-                })
-                .toList();
-
-        return PaginationResponse.<BookResponse>builder()
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .content(responses)
-                .build();
+  return buildPaginationResponse(list,pageNumber,pageSize,1L);
     }
 
     @Override
     public PaginationResponse<BookResponse> getBooksRecommendation(int pageNumber, int pageSize) {
-        //        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new NotFoundException("User not found!"));
-        int offset = (pageNumber - 1) * pageSize;
+//        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsSoon(false).stream()
                 .sorted(Comparator.comparingDouble(BookDocument::getAverageRating).reversed())
                 .toList();
@@ -327,48 +173,12 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("recommendation document not found!");
         }
 
-        int totalElements = list.size();
-        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
-
-        List<BookDocument> pagedBooks = list.stream()
-                .skip(offset)
-                .limit(pageSize)
-                .toList();
-
-        List<BookResponse> responses = pagedBooks.stream()
-                .map(doc -> {
-                    BookResponse response = new BookResponse();
-                    response.setId(doc.getId());
-                    response.setBookName(doc.getBookName());
-                    response.setBanner_url(doc.getBannerUrl());
-                    response.setRating(doc.getAverageRating());
-                    response.setGenreName(doc.getGenres());
-                    response.setAuthor(doc.getAuthors());
-                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
-                    Long currentUserId =1L;
-                    boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
-                    response.setHistory(isHistory);
-                    return response;
-                })
-                .toList();
-
-        return PaginationResponse.<BookResponse>builder()
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .totalElements(totalElements)
-                .totalPages(totalPages)
-                .content(responses)
-                .build();
+       return buildPaginationResponse(list,pageNumber,pageSize,1L);
     }
 
     @Override
     public PaginationResponse<BookResponse> getBookMostRead(int pageNumber, int pageSize) {
-        //        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        User user = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new NotFoundException("User not found!"));
-        int offset = (pageNumber - 1) * pageSize;
+//        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsSoon(false).stream()
                 .sorted(Comparator.comparingInt(BookDocument::getListenerCount).reversed())
                 .toList();
@@ -377,15 +187,39 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("recommendation document not found!");
         }
 
-        int totalElements = list.size();
-        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
+      return buildPaginationResponse(list, pageNumber, pageSize, 1L);
+    }
 
-        List<BookDocument> pagedBooks = list.stream()
+    @Override
+    public PaginationResponse<BookResponse> etBookBySanat(int pageNumber, int pageSize) {
+//        User user = getCurrentUser();
+        List<BookDocument> list = bookDocRepo.findByIsSanat(true).stream()
+                .filter(doc -> !doc.isSoon())
+                .sorted(Comparator.comparingInt(BookDocument::getListenerCount).reversed())
+                .toList();
+        if (list.isEmpty()) {
+            throw new NotFoundException("recommendation document not found!");
+        }
+    return buildPaginationResponse(list,pageNumber,pageSize,1L);
+    }
+    private User getCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found!"));
+    }
+    private PaginationResponse<BookResponse> buildPaginationResponse(
+            List<BookDocument> documents,
+            int pageNumber,
+            int pageSize,
+            Long currentUserId
+    ) {
+        int offset = (pageNumber - 1) * pageSize;
+        int totalElements = documents.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+
+        List<BookResponse> content = documents.stream()
                 .skip(offset)
                 .limit(pageSize)
-                .toList();
-
-        List<BookResponse> responses = pagedBooks.stream()
                 .map(doc -> {
                     BookResponse response = new BookResponse();
                     response.setId(doc.getId());
@@ -397,7 +231,6 @@ public class BookServiceImpl implements BookService {
                     response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
                             .atZone(ZoneId.systemDefault())
                             .toLocalDate());
-                    Long currentUserId =1L;
                     boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
                     response.setHistory(isHistory);
                     return response;
@@ -409,7 +242,8 @@ public class BookServiceImpl implements BookService {
                 .pageSize(pageSize)
                 .totalElements(totalElements)
                 .totalPages(totalPages)
-                .content(responses)
+                .content(content)
                 .build();
     }
+
 }
