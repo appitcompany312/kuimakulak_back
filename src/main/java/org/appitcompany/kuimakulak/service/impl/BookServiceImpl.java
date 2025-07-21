@@ -12,6 +12,8 @@ import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
 import org.appitcompany.kuimakulak.repository.*;
 import org.appitcompany.kuimakulak.service.BookService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -202,6 +204,13 @@ public class BookServiceImpl implements BookService {
         }
     return buildPaginationResponse(list,pageNumber,pageSize,1L);
     }
+
+    @Override
+    public List<BookDocument> getAllBookDoc(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        return bookDocRepo.findAll(pageable).stream().toList();
+    }
+
     private User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.findByEmail(email)

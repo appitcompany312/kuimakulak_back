@@ -2,6 +2,8 @@ package org.appitcompany.kuimakulak.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.appitcompany.kuimakulak.document.BookDocument;
+import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
@@ -10,11 +12,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/book")
 @RequiredArgsConstructor
 public class BookController {
    private final BookService bookService;
+
+    @GetMapping("getAllBookDoc")
+    @Operation(summary = "Get all BookDoc", description = "Fetches all Book documents from Elasticsearch")
+    public List<BookDocument> getAllPodcastDoc(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize) {
+        return bookService.getAllBookDoc(pageNumber,pageSize);
+    }
+
 //   @Secured("ADMIN")
     @Operation(summary = "save book",description = "only admins can add books")
    @PostMapping("/save")

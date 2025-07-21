@@ -4,17 +4,19 @@ import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.entity.Podcast;
 import org.appitcompany.kuimakulak.entity.Rating;
 
+import java.time.ZoneId;
+
 public class PodcastMapper {
     public static PodcastDocument toPodcastDocument(Podcast podcast) {
         PodcastDocument podcastDoc = new PodcastDocument();
      podcastDoc.setPodcastName(podcast.getPodcastName());
      podcastDoc.setDescription(podcast.getDescription());
      podcastDoc.setId(podcast.getId());
-     podcastDoc.setPublicationDate(podcast.getPublicationDate());
+     podcastDoc.setPublicationDate(podcast.getPublicationDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
      podcastDoc.setBannerUrl(podcast.getBannerUrl());
      podcastDoc.setAudioUrl(podcast.getAudioUrl());
      podcastDoc.setChannelName(podcast.getChannel().getChannelName());
-
+     podcastDoc.setChannelAuthor(podcast.getChannel().getChannelAuthor());
      podcastDoc.setFavoriteCount(podcast.getFavorites().size());
 
         if (podcast.getRatings() != null && !podcast.getRatings().isEmpty()) {
