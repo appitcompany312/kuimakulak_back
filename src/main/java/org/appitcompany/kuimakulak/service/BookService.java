@@ -17,4 +17,6 @@ public interface BookService {
     PaginationResponse<BookResponse> getBookIsBestseller(int pageNumber, int pageSize);
 
     PaginationResponse<BookResponse> getBooksRecommendation(int pageNumber, int pageSize);
+
+    PaginationResponse<BookResponse> getBookMostRead(int pageNumber, int pageSize);
 }

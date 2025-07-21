@@ -36,7 +36,6 @@ public class BookServiceImpl implements BookService {
     private final BookDocRepo bookDocRepo;
     private final BookChaptersRepo bookChaptersRepo;
     private final ListenersRepo listenersRepo;
-    private final ElasticsearchOperations elasticsearchOperations;
     @Override
     @Transactional
     public ResponseEntity<?> saveBook(BookRequest bookRequest) {
@@ -364,4 +363,53 @@ public class BookServiceImpl implements BookService {
                 .build();
     }
 
+    @Override
+    public PaginationResponse<BookResponse> getBookMostRead(int pageNumber, int pageSize) {
+        //        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+//        User user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new NotFoundException("User not found!"));
+        int offset = (pageNumber - 1) * pageSize;
+        List<BookDocument> list = bookDocRepo.findByIsSoon(false).stream()
+                .sorted(Comparator.comparingInt(BookDocument::getListenerCount).reversed())
+                .toList();
+
+        if (list.isEmpty()) {
+            throw new NotFoundException("recommendation document not found!");
+        }
+
+        int totalElements = list.size();
+        int totalPages = (int) Math.ceil((double) totalElements / (double) pageSize);
+
+        List<BookDocument> pagedBooks = list.stream()
+                .skip(offset)
+                .limit(pageSize)
+                .toList();
+
+        List<BookResponse> responses = pagedBooks.stream()
+                .map(doc -> {
+                    BookResponse response = new BookResponse();
+                    response.setId(doc.getId());
+                    response.setBookName(doc.getBookName());
+                    response.setBanner_url(doc.getBannerUrl());
+                    response.setRating(doc.getAverageRating());
+                    response.setGenreName(doc.getGenres());
+                    response.setAuthor(doc.getAuthors());
+                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate());
+                    Long currentUserId =1L;
+                    boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
+                    response.setHistory(isHistory);
+                    return response;
+                })
+                .toList();
+
+        return PaginationResponse.<BookResponse>builder()
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .content(responses)
+                .build();
+    }
 }

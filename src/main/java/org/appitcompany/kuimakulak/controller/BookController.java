@@ -62,4 +62,12 @@ public class BookController {
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBooksRecommendation(pageNumber,pageSize);
     }
+    //    @Secured("USER")
+    @GetMapping("/getBookMostRead")
+    @Operation(summary = "get books most read",description = "only user can search")
+    public PaginationResponse<BookResponse> getBookMostRead(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize){
+        return bookService.getBookMostRead(pageNumber,pageSize);
+    }
 }
