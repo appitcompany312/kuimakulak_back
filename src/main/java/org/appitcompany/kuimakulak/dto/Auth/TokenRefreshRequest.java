@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.dto;
+package org.appitcompany.kuimakulak.dto.Auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

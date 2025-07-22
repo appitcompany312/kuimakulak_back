@@ -5,11 +5,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.appitcompany.kuimakulak.dto.AuthResponse;
+import org.appitcompany.kuimakulak.dto.Auth.AuthResponse;
 import org.appitcompany.kuimakulak.entity.RefreshToken;
 import org.appitcompany.kuimakulak.entity.User;
-import org.appitcompany.kuimakulak.service.OAuth2Service;
-import org.appitcompany.kuimakulak.service.RefreshTokenService;
+import org.appitcompany.kuimakulak.service.impl.OAuth2ServiceImpl;
+import org.appitcompany.kuimakulak.service.impl.RefreshTokenServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -27,8 +27,8 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationSuccessHandler.class);
 
     private final JwtUtil jwtUtil;
-    private final RefreshTokenService refreshTokenService;
-    private final OAuth2Service oAuth2Service;
+    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private final OAuth2ServiceImpl oAuth2ServiceImpl;
     private final ObjectMapper objectMapper;
 
 
@@ -42,13 +42,13 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
             LOGGER.info("OAuth2 authentication successful for user: {} with provider: {}", oauth2User.getName(), registrationId);
 
 
-            User appUser = oAuth2Service.processOAuth2User(registrationId, oauth2User);
+            User appUser = oAuth2ServiceImpl.processOAuth2User(registrationId, oauth2User);
 
 
             String jwt = jwtUtil.generateAccessToken(appUser);
 
 
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(appUser.getEmail());
+            RefreshToken refreshToken = refreshTokenServiceImpl.createRefreshToken(appUser.getEmail());
 
 
             AuthResponse authResponse = new AuthResponse(jwt, refreshToken.getToken());
