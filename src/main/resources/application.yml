@@ -49,7 +49,7 @@ apple:
   jwk-set-uri: https://appleid.apple.com/auth/keys
 
 server:
-  port: 8081
+  port: 8080
 
 logging:
   level:

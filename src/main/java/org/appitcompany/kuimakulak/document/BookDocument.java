@@ -36,7 +36,6 @@ public class BookDocument {
     private List<String> narrators = new ArrayList<>();
     @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
     private Double averageRating;
-    private Integer favoriteCount;
     private Integer listenerCount;
     private List<String> chapterNames = new ArrayList<>();
     private Set<Long> userIds  = new HashSet<>();
