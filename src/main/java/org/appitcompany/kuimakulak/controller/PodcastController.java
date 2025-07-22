@@ -3,9 +3,12 @@ package org.appitcompany.kuimakulak.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.PodcastDocument;
+import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastRequest;
+import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
 import org.appitcompany.kuimakulak.service.PodcastService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,5 +32,14 @@ public class PodcastController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody PodcastRequest podcastRequest) {
         return podcastService.save(podcastRequest);
+    }
+    @Secured("USER")
+    @Operation(summary = "get podcasts by channel name" , description = "only admins can add books")
+    @GetMapping("/getPodcastsByChannelName")
+    public PaginationResponse<PodcastResponse> getPodcastsByChannelName(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize,
+            @RequestParam String channelName){
+    return podcastService.getPodcastsByChannelName(pageNumber,pageSize,channelName);
     }
 }
