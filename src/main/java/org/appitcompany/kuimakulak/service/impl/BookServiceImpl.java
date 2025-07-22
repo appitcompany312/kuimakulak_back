@@ -115,7 +115,7 @@ public class BookServiceImpl implements BookService {
     public PaginationResponse<BookResponse> getBookForGenre(String genreName, int pageNumber, int pageSize) {
         List<String> genres = new ArrayList<>();
         genres.add(genreName);
-//        User user = getCurrentUser();
+        User user = getCurrentUser();
         List<BookDocument> allBooks = bookDocRepo.findByGenres(genres).stream()
                 .filter(book -> !book.isSoon())
                 .sorted(Comparator.comparing(BookDocument::getPublicationDate).reversed())
@@ -123,7 +123,7 @@ public class BookServiceImpl implements BookService {
         if (allBooks.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-        return buildPaginationResponse(allBooks,pageNumber,pageSize, 1L);
+        return buildPaginationResponse(allBooks,pageNumber,pageSize, user.getId());
     }
 
     @Override
@@ -140,7 +140,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public PaginationResponse<BookResponse> getBookIsNew(int pageNumber, int pageSize) {
-//        User user = getCurrentUser();
+        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsNew(true).stream()
                 .filter(book -> !book.isSoon())
                 .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
@@ -148,12 +148,12 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("New document not found!");
         }
-  return buildPaginationResponse(list, pageNumber, pageSize,1L);
+  return buildPaginationResponse(list, pageNumber, pageSize,user.getId());
     }
 
     @Override
     public PaginationResponse<BookResponse> getBookIsBestseller(int pageNumber, int pageSize) {
-//        User user = getCurrentUser();
+        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsBestseller(true).stream()
                 .filter(book -> !book.isSoon())
                 .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
@@ -161,12 +161,12 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-  return buildPaginationResponse(list,pageNumber,pageSize,1L);
+  return buildPaginationResponse(list,pageNumber,pageSize,user.getId());
     }
 
     @Override
     public PaginationResponse<BookResponse> getBooksRecommendation(int pageNumber, int pageSize) {
-//        User user = getCurrentUser();
+        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsSoon(false).stream()
                 .sorted(Comparator.comparingDouble(BookDocument::getAverageRating).reversed())
                 .toList();
@@ -175,12 +175,12 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("recommendation document not found!");
         }
 
-       return buildPaginationResponse(list,pageNumber,pageSize,1L);
+       return buildPaginationResponse(list,pageNumber,pageSize,user.getId());
     }
 
     @Override
     public PaginationResponse<BookResponse> getBookMostRead(int pageNumber, int pageSize) {
-//        User user = getCurrentUser();
+        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsSoon(false).stream()
                 .sorted(Comparator.comparingInt(BookDocument::getListenerCount).reversed())
                 .toList();
@@ -189,12 +189,12 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("recommendation document not found!");
         }
 
-      return buildPaginationResponse(list, pageNumber, pageSize, 1L);
+      return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
     }
 
     @Override
     public PaginationResponse<BookResponse> etBookBySanat(int pageNumber, int pageSize) {
-//        User user = getCurrentUser();
+        User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsSanat(true).stream()
                 .filter(doc -> !doc.isSoon())
                 .sorted(Comparator.comparingInt(BookDocument::getListenerCount).reversed())
@@ -202,7 +202,7 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("recommendation document not found!");
         }
-    return buildPaginationResponse(list,pageNumber,pageSize,1L);
+    return buildPaginationResponse(list,pageNumber,pageSize, user.getId());
     }
 
     @Override

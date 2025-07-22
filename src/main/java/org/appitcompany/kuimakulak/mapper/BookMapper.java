@@ -55,7 +55,7 @@ public class BookMapper {
         bookDoc.setChapterNames(book.getChapters().stream()
                 .map(BookChapters::getChapterName).toList());
 
-        bookDoc.setFavoriteCount(book.getFavorites().size());
+
 
         bookDoc.setUserIds(book.getFavorites().stream().map(Favorite::getUser)
                         .map(User::getId)

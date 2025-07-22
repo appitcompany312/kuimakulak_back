@@ -1,10 +1,13 @@
 package org.appitcompany.kuimakulak.mapper;
 
 import org.appitcompany.kuimakulak.document.PodcastDocument;
+import org.appitcompany.kuimakulak.entity.Favorite;
 import org.appitcompany.kuimakulak.entity.Podcast;
 import org.appitcompany.kuimakulak.entity.Rating;
+import org.appitcompany.kuimakulak.entity.User;
 
 import java.time.ZoneId;
+import java.util.stream.Collectors;
 
 public class PodcastMapper {
     public static PodcastDocument toPodcastDocument(Podcast podcast) {
@@ -17,7 +20,8 @@ public class PodcastMapper {
      podcastDoc.setAudioUrl(podcast.getAudioUrl());
      podcastDoc.setChannelName(podcast.getChannel().getChannelName());
      podcastDoc.setChannelAuthor(podcast.getChannel().getChannelAuthor());
-     podcastDoc.setFavoriteCount(podcast.getFavorites().size());
+     podcastDoc.setUserIds(podcast.getFavorites().stream().map(Favorite::getUser)
+             .map(User::getId).collect(Collectors.toSet()));
 
         if (podcast.getRatings() != null && !podcast.getRatings().isEmpty()) {
             double avg = podcast.getRatings().stream()

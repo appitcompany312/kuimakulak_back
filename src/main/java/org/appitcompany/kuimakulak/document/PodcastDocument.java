@@ -9,6 +9,9 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 @Document(indexName = "podcasts")
 @Getter
 @Setter
@@ -24,5 +27,5 @@ public class PodcastDocument {
     private String channelName;
     private String channelAuthor;
     private Double averageRating;
-    private Integer favoriteCount;
+    private Set<Long> userIds  = new HashSet<>();
 }

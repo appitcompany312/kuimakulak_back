@@ -34,7 +34,7 @@ public class BookController {
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){
         return bookService.saveBook(bookRequest);
     }
-//  @Secured("USER")
+  @Secured("USER")
     @GetMapping("/getBookByGenre")
     @Operation(summary = "get books by genre",description = "only user can search")
     public PaginationResponse<BookResponse> getBookByGenre(
@@ -43,7 +43,7 @@ public class BookController {
             @RequestParam String genreName){
         return bookService.getBookForGenre(genreName,pageNumber,pageSize);
     }
-    // @Secured("USER")
+     @Secured("USER")
     @GetMapping("/getBookIsSoon")
     @Operation(summary = "get books by is soon",description = "only user can search")
     public PaginationResponse<BookResponse> getBookIsSoon(
@@ -51,7 +51,7 @@ public class BookController {
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBookIsSoon(pageNumber,pageSize);
     }
-    // @Secured("USER")
+     @Secured("USER")
     @GetMapping("/getBookIsNew")
     @Operation(summary = "get books by is new",description = "only user can search")
     public PaginationResponse<BookResponse> getBookIsNew(
@@ -59,7 +59,7 @@ public class BookController {
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBookIsNew(pageNumber,pageSize);
     }
-    // @Secured("USER")
+     @Secured("USER")
     @GetMapping("/getBookIsBestseller")
     @Operation(summary = "get books by is bestseller",description = "only user can search")
     public PaginationResponse<BookResponse> getBookIsBestseller(
@@ -67,7 +67,7 @@ public class BookController {
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBookIsBestseller(pageNumber,pageSize);
     }
-    // @Secured("USER")
+     @Secured("USER")
     @GetMapping("/getBooksRecommendation")
     @Operation(summary = "get books recommendation",description = "only user can search")
     public PaginationResponse<BookResponse> getBooksRecommendation(
@@ -75,7 +75,7 @@ public class BookController {
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBooksRecommendation(pageNumber,pageSize);
     }
-    // @Secured("USER")
+     @Secured("USER")
     @GetMapping("/getBookMostRead")
     @Operation(summary = "get books most read",description = "only user can search")
     public PaginationResponse<BookResponse> getBookMostRead(
@@ -83,7 +83,7 @@ public class BookController {
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.getBookMostRead(pageNumber,pageSize);
     }
-    // @Secured("USER")
+     @Secured("USER")
     @GetMapping("/getBookBySanat")
     @Operation(summary = "get books by sanat",description = "only user can search")
     public PaginationResponse<BookResponse> etBookBySanat(
