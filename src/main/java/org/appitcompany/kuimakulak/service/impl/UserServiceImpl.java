@@ -1,8 +1,8 @@
 package org.appitcompany.kuimakulak.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.appitcompany.kuimakulak.dto.UserDto.UserProfileDTO;
-import org.appitcompany.kuimakulak.dto.UserDto.UserProfileUpdateRequest;
+import org.appitcompany.kuimakulak.dto.userDto.UserProfileDTO;
+import org.appitcompany.kuimakulak.dto.userDto.UserProfileUpdateRequest;
 import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.exceptions.UnauthorizedException;
 import org.appitcompany.kuimakulak.mapper.UserMapper;

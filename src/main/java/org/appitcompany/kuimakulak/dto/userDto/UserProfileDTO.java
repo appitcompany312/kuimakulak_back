@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.dto.UserDto;
+package org.appitcompany.kuimakulak.dto.userDto;
 
 public record UserProfileDTO(
         String fullName,

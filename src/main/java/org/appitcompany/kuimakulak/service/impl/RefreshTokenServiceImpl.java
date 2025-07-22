@@ -1,7 +1,7 @@
 package org.appitcompany.kuimakulak.service.impl;
 
 import org.appitcompany.kuimakulak.component.JwtUtil;
-import org.appitcompany.kuimakulak.dto.Auth.AuthResponse;
+import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
 import org.appitcompany.kuimakulak.entity.RefreshToken;
 import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.exceptions.TokenNotFoundException;

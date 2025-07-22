@@ -1,6 +1,6 @@
 package org.appitcompany.kuimakulak.mapper;
 
-import org.appitcompany.kuimakulak.dto.UserDto.UserProfileDTO;
+import org.appitcompany.kuimakulak.dto.userDto.UserProfileDTO;
 import org.appitcompany.kuimakulak.entity.User;
 
 public class UserMapper {

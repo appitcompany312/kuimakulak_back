@@ -33,3 +33,5 @@ databaseChangeLog:
       file: db/changelog/016-create-refresh-tokens-table.yaml
   - include:
       file: db/changelog/017-update-contributors-table.yaml
+  - include:
+      file: db/changelog/018-add-admin-user.yaml

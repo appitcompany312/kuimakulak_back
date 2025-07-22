@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.dto.Auth;
+package org.appitcompany.kuimakulak.dto.auth;
 
 import lombok.Builder;
 
