@@ -12,4 +12,5 @@ public class PodcastResponse {
     private String bannerUrl;
     private String channelName;
     private String channelAuthor;
+    private boolean isHistory;
 }
