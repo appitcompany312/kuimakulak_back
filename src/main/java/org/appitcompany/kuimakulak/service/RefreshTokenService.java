@@ -1,6 +1,6 @@
 package org.appitcompany.kuimakulak.service;
 
-import org.appitcompany.kuimakulak.dto.Auth.AuthResponse;
+import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
 import org.appitcompany.kuimakulak.entity.RefreshToken;
 import org.springframework.transaction.annotation.Transactional;
 

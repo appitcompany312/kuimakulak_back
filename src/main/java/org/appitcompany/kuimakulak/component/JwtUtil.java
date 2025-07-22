@@ -119,6 +119,7 @@ public class JwtUtil {
                 .setSubject(user.getEmail())
                 .claim("userId", user.getId())
                 .claim("username", user.getEmail())
+                .claim("role", user.getRole().name())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(appJwtSigningKey, SignatureAlgorithm.HS256)

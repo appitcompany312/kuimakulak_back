@@ -3,6 +3,9 @@ package org.appitcompany.kuimakulak.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -80,6 +83,32 @@ public class GlobalExceptionHandler {
         return ExceptionResponse.builder()
                 .httpStatus(HttpStatus.BAD_REQUEST).
                 message(illegalArgumentException.getMessage())
+                .build();
+    }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ExceptionResponse usernameNotFoundException( UsernameNotFoundException usernameNotFoundException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.NOT_FOUND).
+                message(usernameNotFoundException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse badCredentialsException( BadCredentialsException badCredentialsException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST).
+                message(badCredentialsException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ExceptionResponse accessDeniedException( AccessDeniedException accessDeniedException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.UNAUTHORIZED).
+                message(accessDeniedException.getMessage())
                 .build();
     }
 

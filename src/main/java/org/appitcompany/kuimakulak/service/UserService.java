@@ -1,7 +1,7 @@
 package org.appitcompany.kuimakulak.service;
 
-import org.appitcompany.kuimakulak.dto.UserDto.UserProfileDTO;
-import org.appitcompany.kuimakulak.dto.UserDto.UserProfileUpdateRequest;
+import org.appitcompany.kuimakulak.dto.userDto.UserProfileDTO;
+import org.appitcompany.kuimakulak.dto.userDto.UserProfileUpdateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;

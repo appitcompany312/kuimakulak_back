@@ -66,7 +66,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login/**", "/api/auth/token/refresh").permitAll()
+                        .requestMatchers("/api/auth/login/**", "/api/auth/token/refresh", "/api/auth/admin/login").permitAll()
                         .requestMatchers("/oauth2/**",
                                 "api/book/save",//delete later
                                 "api/genre/save",//delete later
