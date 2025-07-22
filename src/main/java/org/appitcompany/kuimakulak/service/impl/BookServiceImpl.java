@@ -233,7 +233,7 @@ public class BookServiceImpl implements BookService {
                     BookResponse response = new BookResponse();
                     response.setId(doc.getId());
                     response.setBookName(doc.getBookName());
-                    response.setBanner_url(doc.getBannerUrl());
+                    response.setBannerUrl(doc.getBannerUrl());
                     response.setRating(doc.getAverageRating());
                     response.setGenreName(doc.getGenres());
                     response.setAuthor(doc.getAuthors());
@@ -254,5 +254,4 @@ public class BookServiceImpl implements BookService {
                 .content(content)
                 .build();
     }
-
 }
