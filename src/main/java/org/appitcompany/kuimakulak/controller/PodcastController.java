@@ -4,8 +4,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastRequest;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
+import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponseById;
 import org.appitcompany.kuimakulak.service.PodcastService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -41,5 +43,11 @@ public class PodcastController {
             @RequestParam(defaultValue = "16") int pageSize,
             @RequestParam String channelName){
     return podcastService.getPodcastsByChannelName(pageNumber,pageSize,channelName);
+    }
+    @Secured("USER")
+    @GetMapping("/findById")
+    @Operation(summary = "find by id podcast", description = "only user can find by id")
+    public PodcastResponseById findById(@RequestParam Long podcastId){
+        return podcastService.findById(podcastId);
     }
 }

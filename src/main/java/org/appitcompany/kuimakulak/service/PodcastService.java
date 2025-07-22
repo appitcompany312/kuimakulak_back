@@ -4,6 +4,7 @@ import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastRequest;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
+import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponseById;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -16,5 +17,6 @@ public interface PodcastService {
 
     PaginationResponse<PodcastResponse> getPodcastsByChannelName(int pageNumber, int pageSize, String channelName);
 
+    PodcastResponseById findById(Long podcastId);
 }
 

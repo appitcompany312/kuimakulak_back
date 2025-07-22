@@ -6,6 +6,7 @@ import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
 import org.appitcompany.kuimakulak.entity.*;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
@@ -209,6 +210,38 @@ public class BookServiceImpl implements BookService {
     public List<BookDocument> getAllBookDoc(int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
         return bookDocRepo.findAll(pageable).stream().toList();
+    }
+
+    @Override
+    public BookResponseById findById(Long bookId) {
+        User user = getCurrentUser();
+        Book book = bookRepo.findById(bookId)
+                .orElseThrow(() -> new NotFoundException("Book not found!"));
+        BookDocument bookDocument = bookDocRepo
+                .findById(book.getId()).orElse(null);
+        if (bookDocument == null) {
+            BookDocument bookDoc = BookMapper.toBookDocument(book);
+            getBookResponseById(bookDoc,user.getId());
+        }
+        assert bookDocument != null;
+        return   getBookResponseById(bookDocument,user.getId());
+    }
+    private BookResponseById getBookResponseById(BookDocument bookDoc,Long userId) {
+        return BookResponseById.builder()
+                .id(bookDoc.getId())
+                .bookName(bookDoc.getBookName())
+                .description(bookDoc.getDescription())
+                .rating(bookDoc.getAverageRating())
+                .publisher(bookDoc.getPublisher())
+                .bannerUrl(bookDoc.getBannerUrl())
+                .pageCount(bookDoc.getPageCount())
+                .publicationDate(Instant.ofEpochMilli(bookDoc.getPublicationDate())
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate())
+                .ratingCount(bookDoc.getRatingCount())
+                .author(bookDoc.getAuthors())
+                .isHistory(bookDoc.getUserIds() != null && bookDoc.getUserIds().contains(userId))
+                .build();
     }
 
     private User getCurrentUser() {

@@ -23,7 +23,7 @@ public class BookMapper {
         bookDoc.setBookName(book.getBookName());
         bookDoc.setDescription(book.getDescription());
         bookDoc.setPublisher(book.getPublisher());
-
+       bookDoc.setRatingCount(book.getRatings().size());
 
         bookDoc.setListenerCount(book.getListeners().getCountListeners());
 
