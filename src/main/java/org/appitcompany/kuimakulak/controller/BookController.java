@@ -7,6 +7,7 @@ import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -90,5 +91,11 @@ public class BookController {
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize){
         return bookService.etBookBySanat(pageNumber,pageSize);
+    }
+    @Secured("USER")
+    @GetMapping("/findById")
+    @Operation(summary = "find by id book", description = "only user can find by id")
+    public BookResponseById findById(@RequestParam Long bookId){
+     return bookService.findById(bookId);
     }
 }

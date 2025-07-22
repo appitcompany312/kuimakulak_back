@@ -5,6 +5,7 @@ import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -29,4 +30,5 @@ public interface BookService {
 
     List<BookDocument> getAllBookDoc(int pageNumber, int pageSize);
 
+    BookResponseById findById(Long bookId);
 }
