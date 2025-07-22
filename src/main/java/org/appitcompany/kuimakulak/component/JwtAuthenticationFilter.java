@@ -5,8 +5,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.appitcompany.kuimakulak.service.TokenBlacklistService;
-import org.appitcompany.kuimakulak.service.UserDetailsServiceImpl;
+import org.appitcompany.kuimakulak.service.impl.TokenBlacklistServiceImpl;
+import org.appitcompany.kuimakulak.service.impl.UserDetailsServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,13 +20,13 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
-    private final TokenBlacklistService tokenBlacklistService;
+    private final TokenBlacklistServiceImpl tokenBlacklistServiceImpl;
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService,
-                                   TokenBlacklistService tokenBlacklistService) {
+                                   TokenBlacklistServiceImpl tokenBlacklistServiceImpl) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
-        this.tokenBlacklistService = tokenBlacklistService;
+        this.tokenBlacklistServiceImpl = tokenBlacklistServiceImpl;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
 
-        if (tokenBlacklistService.isTokenBlacklisted(jwt)) {
+        if (tokenBlacklistServiceImpl.isTokenBlacklisted(jwt)) {
             filterChain.doFilter(request, response);
             return;
         }

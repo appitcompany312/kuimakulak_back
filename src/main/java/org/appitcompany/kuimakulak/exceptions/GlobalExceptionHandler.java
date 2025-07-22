@@ -65,5 +65,22 @@ public class GlobalExceptionHandler {
                 message(customAlreadyExistsException.getMessage())
                 .build();
     }
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ExceptionResponse unauthorizedException( UnauthorizedException unauthorizedException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.UNAUTHORIZED).
+                message(unauthorizedException.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionResponse illegalArgumentException( IllegalArgumentException illegalArgumentException) {
+        return ExceptionResponse.builder()
+                .httpStatus(HttpStatus.BAD_REQUEST).
+                message(illegalArgumentException.getMessage())
+                .build();
+    }
 
 }

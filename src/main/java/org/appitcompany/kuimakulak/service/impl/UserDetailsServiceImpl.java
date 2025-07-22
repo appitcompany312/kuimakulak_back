@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.service;
+package org.appitcompany.kuimakulak.service.impl;
 
 import org.appitcompany.kuimakulak.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.appitcompany.kuimakulak.dto.AuthResponse;
-import org.appitcompany.kuimakulak.dto.TokenRefreshRequest;
-import org.appitcompany.kuimakulak.service.OAuth2Service;
-import org.appitcompany.kuimakulak.service.RefreshTokenService;
+import org.appitcompany.kuimakulak.dto.Auth.AuthResponse;
+import org.appitcompany.kuimakulak.dto.Auth.TokenRefreshRequest;
+import org.appitcompany.kuimakulak.service.impl.OAuth2ServiceImpl;
+import org.appitcompany.kuimakulak.service.impl.RefreshTokenServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +26,8 @@ import java.net.URI;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final RefreshTokenService refreshTokenService;
-    private final OAuth2Service oAuth2Service;
+    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
+    private final OAuth2ServiceImpl oAuth2ServiceImpl;
 
     @GetMapping("/login/google")
     @Operation(summary = "Initiate Google Login (Redirects to Google)")
@@ -59,7 +59,7 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Refresh token is invalid or expired")
     })
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
-        AuthResponse response = refreshTokenService.refreshAccessToken(request.refreshToken());
+        AuthResponse response = refreshTokenServiceImpl.refreshAccessToken(request.refreshToken());
         return ResponseEntity.ok(response);
     }
 
@@ -71,7 +71,7 @@ public class AuthController {
     })
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader,
                                        @Valid @RequestBody TokenRefreshRequest request) {
-        oAuth2Service.logout(authHeader, request.refreshToken());
+        oAuth2ServiceImpl.logout(authHeader, request.refreshToken());
         return ResponseEntity.ok().build();
     }
 
