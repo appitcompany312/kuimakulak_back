@@ -29,7 +29,7 @@ public class PodcastController {
    return podcastService.getAllPodcastDoc(pageNumber,pageSize);
     }
 
-    //@Secured("ADMIN")
+    @Secured("ADMIN")
     @Operation(summary = "save book", description = "only admins can add books")
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody PodcastRequest podcastRequest) {

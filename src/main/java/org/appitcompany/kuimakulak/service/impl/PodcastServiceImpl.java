@@ -80,7 +80,7 @@ public class PodcastServiceImpl implements PodcastService {
         int offset = (pageNumber - 1) * pageSize;
         List<PodcastDocument> byChannelName = podcastDocRepo.findByChannelName(channelName)
                 .stream()
-                .sorted(Comparator.comparingLong(PodcastDocument::getPublicationDate).reversed())
+                .sorted(Comparator.comparing(PodcastDocument::getPublicationDate).reversed())
                 .toList();
         int totalElements = byChannelName.size();
         int totalPages = (int) Math.ceil((double) totalElements / pageSize);
@@ -132,9 +132,7 @@ public class PodcastServiceImpl implements PodcastService {
                 .channelAuthor(podcastDocument.getChannelAuthor())
                 .averageRating(podcastDocument.getAverageRating())
                 .isHistory(podcastDocument.getUserIds() != null && podcastDocument.getUserIds().contains(userId))
-                .publicationDate(Instant.ofEpochMilli(podcastDocument.getPublicationDate())
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate())
+                .publicationDate(podcastDocument.getPublicationDate())
                 .build();
     }
 

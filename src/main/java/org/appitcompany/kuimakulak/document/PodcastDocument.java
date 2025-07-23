@@ -9,6 +9,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,8 +23,8 @@ public class PodcastDocument {
     private String description;
     private String audioUrl;
     private String bannerUrl;
-    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
-    private Long publicationDate;
+    @Field(type = FieldType.Date, format = DateFormat.date)
+    private LocalDate publicationDate;
     private String channelName;
     private String channelAuthor;
     private Double averageRating;

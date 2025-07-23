@@ -68,11 +68,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login/**", "/api/auth/token/refresh", "/api/auth/admin/login").permitAll()
                         .requestMatchers("/oauth2/**",
-                                "api/book/save",//delete later
-                                "api/genre/save",//delete later
-                                "api/channel/save",//delete later
-                                "api/podcast/save",//delete later
-                                "api/contributor/save",//delete later
                                 "/login/oauth2/code/*").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()

@@ -6,10 +6,10 @@ databaseChangeLog:
         - onFail: MARK_RAN
         - not:
             tableExists:
-              tableName: favorite-books
+              tableName: favorite_books
       changes:
         - createTable:
-            tableName: favorite-books
+            tableName: favorite_books
             columns:
               - column:
                   name: favorites_id

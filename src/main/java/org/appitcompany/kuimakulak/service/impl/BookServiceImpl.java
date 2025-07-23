@@ -130,7 +130,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public PaginationResponse<BookResponse> getBookIsSoon(int pageNumber, int pageSize) {
         List<BookDocument> list = bookDocRepo.findByIsSoon(true).stream()
-                .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
+                .sorted(Comparator.comparing(BookDocument::getPublicationDate).reversed())
                 .toList();
 
         if (list.isEmpty()) {
@@ -144,7 +144,7 @@ public class BookServiceImpl implements BookService {
         User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsNew(true).stream()
                 .filter(book -> !book.isSoon())
-                .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
+                .sorted(Comparator.comparing(BookDocument::getPublicationDate).reversed())
                 .toList();
         if (list.isEmpty()) {
             throw new NotFoundException("New document not found!");
@@ -157,7 +157,7 @@ public class BookServiceImpl implements BookService {
         User user = getCurrentUser();
         List<BookDocument> list = bookDocRepo.findByIsBestseller(true).stream()
                 .filter(book -> !book.isSoon())
-                .sorted(Comparator.comparingLong(BookDocument::getPublicationDate).reversed())
+                .sorted(Comparator.comparing(BookDocument::getPublicationDate).reversed())
                 .toList();
         if (list.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
@@ -235,9 +235,7 @@ public class BookServiceImpl implements BookService {
                 .publisher(bookDoc.getPublisher())
                 .bannerUrl(bookDoc.getBannerUrl())
                 .pageCount(bookDoc.getPageCount())
-                .publicationDate(Instant.ofEpochMilli(bookDoc.getPublicationDate())
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate())
+                .publicationDate(bookDoc.getPublicationDate())
                 .ratingCount(bookDoc.getRatingCount())
                 .author(bookDoc.getAuthors())
                 .isHistory(bookDoc.getUserIds() != null && bookDoc.getUserIds().contains(userId))
@@ -270,9 +268,7 @@ public class BookServiceImpl implements BookService {
                     response.setRating(doc.getAverageRating());
                     response.setGenreName(doc.getGenres());
                     response.setAuthor(doc.getAuthors());
-                    response.setPublicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate());
+                    response.setPublicationDate(doc.getPublicationDate());
                     boolean isHistory = doc.getUserIds() != null && doc.getUserIds().contains(currentUserId);
                     response.setHistory(isHistory);
                     return response;

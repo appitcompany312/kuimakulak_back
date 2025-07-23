@@ -15,7 +15,7 @@ public class PodcastMapper {
      podcastDoc.setPodcastName(podcast.getPodcastName());
      podcastDoc.setDescription(podcast.getDescription());
      podcastDoc.setId(podcast.getId());
-     podcastDoc.setPublicationDate(podcast.getPublicationDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+     podcastDoc.setPublicationDate(podcast.getPublicationDate());
      podcastDoc.setBannerUrl(podcast.getBannerUrl());
      podcastDoc.setAudioUrl(podcast.getAudioUrl());
      podcastDoc.setChannelName(podcast.getChannel().getChannelName());

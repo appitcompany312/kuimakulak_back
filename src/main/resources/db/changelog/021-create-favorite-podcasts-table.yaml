@@ -1,15 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: 20
+      id: 21
       author: nursultan
       preConditions:
         - onFail: MARK_RAN
         - not:
             tableExists:
-              tableName: favorite-podcasts
+              tableName: favorite_podcasts
       changes:
         - createTable:
-            tableName: favorite-podcasts
+            tableName: favorite_podcasts
             columns:
               - column:
                   name: favorites_id
