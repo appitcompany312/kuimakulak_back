@@ -35,3 +35,9 @@ databaseChangeLog:
       file: db/changelog/017-update-contributors-table.yaml
   - include:
       file: db/changelog/018-add-admin-user.yaml
+  - include:
+      file: db/changelog/019-update-favorite-table.yaml
+  - include:
+      file: db/changelog/020-create-favorite-books-table.yaml
+  - include:
+      file: db/changelog/021-create-favorite-podcasts-table.yaml

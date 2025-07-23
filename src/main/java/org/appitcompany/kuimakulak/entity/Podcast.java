@@ -32,8 +32,8 @@ public class Podcast {
     @OneToMany(mappedBy = "podcast")
     private List<Rating> ratings  = new ArrayList<>();
 
-    @OneToMany(mappedBy = "podcast")
-    private List<Favorite> favorites = new ArrayList<>();
+    @ManyToMany(mappedBy = "podcasts")
+    private List<Favorite> favorites;
 
     @OneToMany(mappedBy = "podcast")
     private  List<History> history  = new ArrayList<>();

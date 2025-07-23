@@ -44,8 +44,8 @@ public class Book {
     @ManyToMany
     private List<User> users  = new ArrayList<>();
 
-    @OneToMany(mappedBy = "book")
-    private List<Favorite> favorites   = new ArrayList<>();
+    @ManyToMany(mappedBy = "books")
+    private List<Favorite> favorites;
 
     @OneToMany(mappedBy = "book")
     private List<History> historys   = new ArrayList<>();
@@ -55,5 +55,4 @@ public class Book {
 
     @OneToOne(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
     private Listeners listeners;
-
 }

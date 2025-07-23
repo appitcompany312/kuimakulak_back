@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19
+      author: nursultan
+      changes:
+        - dropColumn:
+            columnName: podcast_id
+            tableName: favorite
+        - dropColumn:
+            columnName: saved_date
+            tableName: favorite
+        - dropColumn:
+            columnName: book_id
+            tableName: favorite
