@@ -5,8 +5,10 @@ import org.appitcompany.kuimakulak.component.JwtUtil;
 import org.appitcompany.kuimakulak.dto.admin.AdminLoginRequest;
 import org.appitcompany.kuimakulak.dto.admin.AdminPasswordChangeRequest;
 import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
+import org.appitcompany.kuimakulak.entity.RefreshToken;
 import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.enums.Role;
+import org.appitcompany.kuimakulak.exceptions.TokenNotFoundException;
 import org.appitcompany.kuimakulak.exceptions.UnauthorizedException;
 import org.appitcompany.kuimakulak.repository.UserRepository;
 import org.appitcompany.kuimakulak.service.AdminService;
@@ -22,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -95,6 +98,19 @@ public class AdminServiceImpl implements AdminService {
         userRepository.save(currentUser);
 
 
+    }
+
+    @Override
+    @Transactional
+    public AuthResponse refreshAccessToken(String refreshToken) {
+        RefreshToken token = refreshTokenService.findByToken(refreshToken)
+                .map(this.refreshTokenService::verifyExpiration)
+                .orElseThrow(() -> new TokenNotFoundException("Refresh token not found in database!"));
+
+        User user = token.getUser();
+        String newJwt = jwtUtil.generateAccessToken(user);
+
+        return new AuthResponse(newJwt, refreshToken);
     }
 
     private User getUserFromAuthentication(Authentication authentication) {

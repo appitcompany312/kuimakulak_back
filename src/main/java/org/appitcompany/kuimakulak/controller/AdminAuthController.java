@@ -41,6 +41,19 @@ public class AdminAuthController {
         return ResponseEntity.ok(adminService.adminLogin(adminLoginRequest));
     }
 
+    @PostMapping("/token/refresh")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Refresh JWT access token using a refresh token")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Successfully refreshed token"),
+            @ApiResponse(responseCode = "400", description = "Invalid refresh token request"),
+            @ApiResponse(responseCode = "403", description = "Refresh token is invalid or expired")
+    })
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        AuthResponse response = adminService.refreshAccessToken(request.refreshToken());
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/logout")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Logout admin by blacklisting access token and deleting refresh token")

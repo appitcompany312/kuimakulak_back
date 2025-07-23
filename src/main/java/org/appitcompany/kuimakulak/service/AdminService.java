@@ -12,4 +12,6 @@ public interface AdminService {
     void logout(String authHeader, String s);
 
     void changePassword(Authentication authentication, AdminPasswordChangeRequest request);
+
+    AuthResponse refreshAccessToken(String s);
 }

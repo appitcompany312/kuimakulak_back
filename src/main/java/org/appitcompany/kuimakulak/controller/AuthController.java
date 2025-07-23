@@ -7,8 +7,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
 import org.appitcompany.kuimakulak.dto.auth.TokenRefreshRequest;
-import org.appitcompany.kuimakulak.service.impl.OAuth2ServiceImpl;
-import org.appitcompany.kuimakulak.service.impl.RefreshTokenServiceImpl;
+import org.appitcompany.kuimakulak.service.OAuth2Service;
+import org.appitcompany.kuimakulak.service.RefreshTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +26,8 @@ import java.net.URI;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final RefreshTokenServiceImpl refreshTokenServiceImpl;
-    private final OAuth2ServiceImpl oAuth2ServiceImpl;
+    private final RefreshTokenService refreshTokenService;
+    private final OAuth2Service oAuth2Service;
 
     @GetMapping("/login/google")
     @Operation(summary = "Initiate Google Login (Redirects to Google)")
@@ -59,7 +59,7 @@ public class AuthController {
             @ApiResponse(responseCode = "403", description = "Refresh token is invalid or expired")
     })
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
-        AuthResponse response = refreshTokenServiceImpl.refreshAccessToken(request.refreshToken());
+        AuthResponse response = refreshTokenService.refreshAccessToken(request.refreshToken());
         return ResponseEntity.ok(response);
     }
 
@@ -71,7 +71,7 @@ public class AuthController {
     })
     public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader,
                                        @Valid @RequestBody TokenRefreshRequest request) {
-        oAuth2ServiceImpl.logout(authHeader, request.refreshToken());
+        oAuth2Service.logout(authHeader, request.refreshToken());
         return ResponseEntity.ok().build();
     }
 
