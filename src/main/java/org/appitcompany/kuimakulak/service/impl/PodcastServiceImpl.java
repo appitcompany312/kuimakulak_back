@@ -110,8 +110,7 @@ public class PodcastServiceImpl implements PodcastService {
     @Override
     public PodcastResponseById findById(Long podcastId) {
         User user = getCurrentUser();
-        Podcast podcast = podcastRepo.findById(podcastId)
-                .orElseThrow(() -> new NotFoundException("Podcast with id " + podcastId + " not found"));
+        Podcast podcast = podcastRepo.findByIdOrElseThrow(podcastId);
         PodcastDocument podcastDocument = podcastDocRepo.findById(podcastId).orElse(null);
         if (podcastDocument == null) {
             PodcastDocument podcastDoc = PodcastMapper.toPodcastDocument(podcast);
@@ -138,7 +137,6 @@ public class PodcastServiceImpl implements PodcastService {
 
     private User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User with email " + email + " not found"));
+        return userRepository.getUserByEmailOrElseThrow(email);
     }
 }

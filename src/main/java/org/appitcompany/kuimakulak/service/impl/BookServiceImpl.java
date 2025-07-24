@@ -215,8 +215,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookResponseById findById(Long bookId) {
         User user = getCurrentUser();
-        Book book = bookRepo.findById(bookId)
-                .orElseThrow(() -> new NotFoundException("Book not found!"));
+        Book book = bookRepo.getBookByBookIdOrElseThrow(bookId);
         BookDocument bookDocument = bookDocRepo
                 .findById(book.getId()).orElse(null);
         if (bookDocument == null) {
@@ -244,8 +243,7 @@ public class BookServiceImpl implements BookService {
 
     private User getCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found!"));
+        return userRepository.getUserByEmailOrElseThrow(email);
     }
     private PaginationResponse<BookResponse> buildPaginationResponse(
             List<BookDocument> documents,

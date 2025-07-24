@@ -12,7 +12,6 @@ import java.util.List;
 public interface PodcastService {
     ResponseEntity<?> save(PodcastRequest podcastRequest);
 
-
     List<PodcastDocument> getAllPodcastDoc(int pageNumber, int pageSize);
 
     PaginationResponse<PodcastResponse> getPodcastsByChannelName(int pageNumber, int pageSize, String channelName);
