@@ -40,6 +40,6 @@ public class BookDocument {
     private Double averageRating;
     private int ratingCount;
     private Integer listenerCount;
-    private List<String> chapterNames = new ArrayList<>();
+    private List<BookChaptersDocument> chapters = new ArrayList<>();
     private Set<Long> userIds  = new HashSet<>();
 }

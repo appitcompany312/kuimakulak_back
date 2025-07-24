@@ -1,6 +1,7 @@
 package org.appitcompany.kuimakulak.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
@@ -32,7 +33,7 @@ public class PodcastController {
     @Secured("ADMIN")
     @Operation(summary = "save book", description = "only admins can add books")
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody PodcastRequest podcastRequest) {
+    public ResponseEntity<?> save(@Valid @RequestBody PodcastRequest podcastRequest) {
         return podcastService.save(podcastRequest);
     }
     @Secured("USER")
