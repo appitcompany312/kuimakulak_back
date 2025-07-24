@@ -4,12 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.BookDocument;
-import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookByIdForPlayerResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
+import org.appitcompany.kuimakulak.dto.bookDto.*;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -25,10 +21,18 @@ public class BookController {
 
     @GetMapping("getAllBookDoc")
     @Operation(summary = "Get all BookDoc", description = "Fetches all Book documents from Elasticsearch")
-    public List<BookDocument> getAllPodcastDoc(
+    public List<BookDocument> getAllBookDoc(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize) {
         return bookService.getAllBookDoc(pageNumber,pageSize);
+    }
+    @Secured("ADMIN")
+    @GetMapping("getAllBook")
+    @Operation(summary = "Get all Book", description = "only admins can get all books")
+    public PaginationResponse<AllBookResponse> getAllBook(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize) {
+        return bookService.getAllBook(pageNumber,pageSize);
     }
 
    @Secured("ADMIN")
@@ -105,6 +109,34 @@ public class BookController {
     @Operation(summary = "find by id for player", description = "only user can find by id")
     public BookByIdForPlayerResponse findByIdPlayer(@RequestParam Long bookId){
         return bookService.findByIdPlayer(bookId);
+    }
+    @Secured("ADMIN")
+    @Operation(summary = "updated isNew in book",description = "only admins can")
+    @PostMapping("/updatedIsNew")
+    public String updatedIsNew(@RequestParam Long bookId,
+                               @RequestParam boolean isNew ){
+        return bookService.updatedIsNew(bookId,isNew);
+    }
+    @Secured("ADMIN")
+    @Operation(summary = "updated isSanat in book" ,description = "only admins can")
+    @PostMapping("/updatedIsSanat")
+    public String updatedIsSanat(@RequestParam Long bookId,
+                               @RequestParam boolean isSanat ){
+        return bookService.updatedIsSanat(bookId,isSanat);
+    }
+    @Secured("ADMIN")
+    @Operation(summary = "updated isBestseller in book",description = "only admins can")
+    @PostMapping("/updatedIsBestseller")
+    public String updatedIsBestseller(@RequestParam Long bookId,
+                               @RequestParam boolean isBestseller ){
+        return bookService.updatedIsBestseller(bookId,isBestseller);
+    }
+    @Secured("ADMIN")
+    @Operation(summary = "updated isSoon in book",description = "only admins can")
+    @PostMapping("/updatedIsSoon")
+    public String updatedIsSoon(@RequestParam Long bookId,
+                               @RequestParam boolean isSoon ){
+        return bookService.updatedIsSoon(bookId,isSoon);
     }
 
 }
