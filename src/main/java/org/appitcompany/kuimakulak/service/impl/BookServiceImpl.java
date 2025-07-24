@@ -2,15 +2,15 @@ package org.appitcompany.kuimakulak.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.appitcompany.kuimakulak.document.BookChaptersDocument;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
+import org.appitcompany.kuimakulak.dto.bookDto.*;
 import org.appitcompany.kuimakulak.entity.*;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
+import org.appitcompany.kuimakulak.mapper.ChaptersMapper;
 import org.appitcompany.kuimakulak.repository.*;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.data.domain.PageRequest;
@@ -20,9 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -220,11 +218,24 @@ public class BookServiceImpl implements BookService {
                 .findById(book.getId()).orElse(null);
         if (bookDocument == null) {
             BookDocument bookDoc = BookMapper.toBookDocument(book);
-            getBookResponseById(bookDoc,user.getId());
+          return   getBookResponseById(bookDoc,user.getId());
         }
-        assert bookDocument != null;
         return   getBookResponseById(bookDocument,user.getId());
     }
+
+    @Override
+    public BookByIdForPlayerResponse findByIdPlayer(Long bookId) {
+        User user = getCurrentUser();
+        Book book = bookRepo.getBookByBookIdOrElseThrow(bookId);
+        BookDocument bookDocument = bookDocRepo
+                .findById(book.getId()).orElse(null);
+        if (bookDocument == null) {
+            BookDocument bookDoc = BookMapper.toBookDocument(book);
+           return toResponse(bookDoc,user.getId());
+        }
+        return  toResponse(bookDocument,user.getId());
+    }
+
     private BookResponseById getBookResponseById(BookDocument bookDoc,Long userId) {
         return BookResponseById.builder()
                 .id(bookDoc.getId())
@@ -238,6 +249,24 @@ public class BookServiceImpl implements BookService {
                 .ratingCount(bookDoc.getRatingCount())
                 .author(bookDoc.getAuthors())
                 .isHistory(bookDoc.getUserIds() != null && bookDoc.getUserIds().contains(userId))
+                .build();
+    }
+    private BookByIdForPlayerResponse toResponse(BookDocument bookDoc,Long userId) {
+        return BookByIdForPlayerResponse.builder()
+                .id(bookDoc.getId())
+                .bookName(bookDoc.getBookName())
+                .bannerUrl(bookDoc.getBannerUrl())
+                .author(bookDoc.getAuthors())
+                .isHistory(bookDoc.getUserIds() != null && bookDoc.getUserIds().contains(userId))
+                .chapters(bookDoc.getChapters().stream().map(this::toResponse).toList())
+                .build();
+    }
+    private ChapterResponse toResponse(BookChaptersDocument bookChaptersDocument) {
+        return ChapterResponse.builder()
+                .id(bookChaptersDocument.getId())
+                .audioUrl(bookChaptersDocument.getAudioUrl())
+                .chapterName(bookChaptersDocument.getChapterName())
+                .chapterNumber(bookChaptersDocument.getChapterNumber())
                 .build();
     }
 
