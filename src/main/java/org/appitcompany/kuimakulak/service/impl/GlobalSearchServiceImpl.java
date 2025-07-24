@@ -32,8 +32,7 @@ public class GlobalSearchServiceImpl implements GlobalSearchService {
     @Override
     public PaginationResponse<GlobalSearchResponse> globalSearch(String keyword, int pageSize, int pageNumber) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).
-                orElseThrow(() -> new NotFoundException("User not found"));
+        User user = userRepository.getUserByEmailOrElseThrow(email);
         int size =(int) pageSize/2;
         if (size==0){size=1;}
         Pageable pageable = PageRequest.of(pageNumber - 1, size);

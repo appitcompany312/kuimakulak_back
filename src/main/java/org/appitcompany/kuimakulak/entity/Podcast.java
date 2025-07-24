@@ -33,7 +33,7 @@ public class Podcast {
     private List<Rating> ratings  = new ArrayList<>();
 
     @ManyToMany(mappedBy = "podcasts")
-    private List<Favorite> favorites;
+    private List<Favorite> favorites = new ArrayList<>();
 
     @OneToMany(mappedBy = "podcast")
     private  List<History> history  = new ArrayList<>();
