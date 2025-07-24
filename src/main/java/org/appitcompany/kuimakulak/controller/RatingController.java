@@ -18,13 +18,15 @@ public class RatingController {
     @Secured("USER")
     @Operation(summary = "add rating ", description = "add and updated rating for user")
     @PostMapping("/addRatingBook")
-    public ResponseEntity<?> addRatingBook(@RequestParam() int rating, @RequestParam Long bookId) {
+    public ResponseEntity<?> addRatingBook(@RequestParam() int rating,
+                                           @RequestParam Long bookId) {
         return ratingService.addRatingBook(rating,bookId);
     }
     @Secured("USER")
     @Operation(summary = "add rating ", description = "add and updated rating for user")
     @PostMapping("/addRatingPodcast")
-    public ResponseEntity<?> addRatingPodcast(@RequestParam() int rating, @RequestParam Long podcastId) {
+    public ResponseEntity<?> addRatingPodcast(@RequestParam() int rating,
+                                              @RequestParam Long podcastId) {
         return ratingService.addRatingPodcast(rating,podcastId);
     }
 }

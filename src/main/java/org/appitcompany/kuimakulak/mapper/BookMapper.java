@@ -1,11 +1,13 @@
 package org.appitcompany.kuimakulak.mapper;
 
 
+import org.appitcompany.kuimakulak.document.BookChaptersDocument;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.entity.*;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 
 import java.time.ZoneId;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookMapper {
@@ -51,9 +53,10 @@ public class BookMapper {
                         .map(Contributor::getFullName)
                         .collect(Collectors.toList())
         );
-
-        bookDoc.setChapterNames(book.getChapters().stream()
-                .map(BookChapters::getChapterName).toList());
+        List<BookChaptersDocument> list = book.getChapters().stream()
+                .map(ChaptersMapper::toDoc)
+                .toList();
+        bookDoc.setChapters(list);
 
         bookDoc.setUserIds(book.getFavorites().stream().map(Favorite::getUser)
                         .map(User::getId)

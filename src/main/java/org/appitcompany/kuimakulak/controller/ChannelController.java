@@ -1,6 +1,7 @@
 package org.appitcompany.kuimakulak.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.channel.ChannelRequest;
 import org.appitcompany.kuimakulak.service.ChannelService;
@@ -19,7 +20,7 @@ public class ChannelController {
     @Secured("ADMIN")
     @Operation(summary = "save channel",description = "only admins can add books")
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody ChannelRequest channelRequest){
+    public ResponseEntity<?> save(@Valid @RequestBody ChannelRequest channelRequest){
        return channelService.save(channelRequest);
     }
 }
