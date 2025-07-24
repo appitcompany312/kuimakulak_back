@@ -29,7 +29,7 @@ public class BookController {
         return bookService.getAllBookDoc(pageNumber,pageSize);
     }
 
-//   @Secured("ADMIN")
+   @Secured("ADMIN")
     @Operation(summary = "save book",description = "only admins can add books")
    @PostMapping("/save")
     public ResponseEntity<?> saveBook(@RequestBody BookRequest bookRequest){

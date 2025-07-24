@@ -1,8 +1,9 @@
 package org.appitcompany.kuimakulak.document;
 
-import jakarta.persistence.Id;
+
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -22,8 +23,8 @@ public class PodcastDocument {
     private String description;
     private String audioUrl;
     private String bannerUrl;
-    @Field(type = FieldType.Date, format = DateFormat.epoch_millis)
-    private Long publicationDate;
+    @Field(type = FieldType.Date, format = DateFormat.date)
+    private LocalDate publicationDate;
     private String channelName;
     private String channelAuthor;
     private Double averageRating;

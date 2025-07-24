@@ -76,9 +76,7 @@ public class GlobalSearchServiceImpl implements GlobalSearchService {
                 .genreName(doc.getGenres())
                 .author(doc.getAuthors())
                 .rating(doc.getAverageRating())
-                .publicationDate(Instant.ofEpochMilli(doc.getPublicationDate())
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate())
+                .publicationDate(doc.getPublicationDate())
                 .isHistory(doc.getUserIds() != null && doc.getUserIds().contains(currentUserId))
                 .build();
     }

@@ -17,7 +17,7 @@ public class BookMapper {
         bookDoc.setSanat(book.isSanat());
         bookDoc.setSoon(book.isSoon());
         bookDoc.setPageCount(book.getPageCount());
-        bookDoc.setPublicationDate(book.getPublicationDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        bookDoc.setPublicationDate(book.getPublicationDate());
         bookDoc.setId(book.getId());
         bookDoc.setBannerUrl(book.getBannerUrl());
         bookDoc.setBookName(book.getBookName());
@@ -54,8 +54,6 @@ public class BookMapper {
 
         bookDoc.setChapterNames(book.getChapters().stream()
                 .map(BookChapters::getChapterName).toList());
-
-
 
         bookDoc.setUserIds(book.getFavorites().stream().map(Favorite::getUser)
                         .map(User::getId)
