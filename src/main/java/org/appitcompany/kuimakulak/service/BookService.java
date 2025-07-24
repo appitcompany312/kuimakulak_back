@@ -2,10 +2,7 @@ package org.appitcompany.kuimakulak.service;
 
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookByIdForPlayerResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
+import org.appitcompany.kuimakulak.dto.bookDto.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -33,4 +30,15 @@ public interface BookService {
     BookResponseById findById(Long bookId);
 
     BookByIdForPlayerResponse findByIdPlayer(Long bookId);
+
+    PaginationResponse<AllBookResponse> getAllBook(int pageNumber, int pageSize);
+
+    String updatedIsNew(Long bookId, boolean isNew);
+
+    String updatedIsSanat(Long bookId, boolean isSanat);
+
+    String updatedIsBestseller(Long bookId, boolean isBestseller);
+
+    String updatedIsSoon(Long bookId, boolean isSoon);
 }
+

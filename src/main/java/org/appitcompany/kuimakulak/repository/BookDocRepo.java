@@ -1,6 +1,7 @@
 package org.appitcompany.kuimakulak.repository;
 
 import org.appitcompany.kuimakulak.document.BookDocument;
+import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
@@ -45,4 +46,7 @@ public interface BookDocRepo extends ElasticsearchRepository<BookDocument,Long> 
     List<BookDocument> findByIsSoon(boolean b);
 
     List<BookDocument> findByIsSanat(boolean b);
+    default BookDocument findByIdOrElseThrow(Long id) {
+        return findById(id).orElseThrow(()-> new NotFoundException("Book document with id " + id + " not found"));
+    }
 }

@@ -10,7 +10,6 @@ import org.appitcompany.kuimakulak.entity.*;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
-import org.appitcompany.kuimakulak.mapper.ChaptersMapper;
 import org.appitcompany.kuimakulak.repository.*;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class BookServiceImpl implements BookService {
     private final BookDocRepo bookDocRepo;
     private final BookChaptersRepo bookChaptersRepo;
     private final ListenersRepo listenersRepo;
+
     @Override
     @Transactional
     public ResponseEntity<?> saveBook(BookRequest bookRequest) {
@@ -84,7 +85,7 @@ public class BookServiceImpl implements BookService {
                     }
                     saveBook.getGenres().add(genre);
                     return genre;
-                }).forEach(genre -> genre.getBooks().add(saveBook) );
+                }).forEach(genre -> genre.getBooks().add(saveBook));
 
         Listeners listeners = book.getListeners();
         if (listeners == null) {
@@ -122,7 +123,7 @@ public class BookServiceImpl implements BookService {
         if (allBooks.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-        return buildPaginationResponse(allBooks,pageNumber,pageSize, user.getId());
+        return buildPaginationResponse(allBooks, pageNumber, pageSize, user.getId());
     }
 
     @Override
@@ -134,7 +135,7 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-        return buildPaginationResponse(list,pageNumber,pageSize,0L);
+        return buildPaginationResponse(list, pageNumber, pageSize, 0L);
     }
 
     @Override
@@ -147,7 +148,7 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("New document not found!");
         }
-  return buildPaginationResponse(list, pageNumber, pageSize,user.getId());
+        return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
     }
 
     @Override
@@ -160,7 +161,7 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("Soon document not found!");
         }
-  return buildPaginationResponse(list,pageNumber,pageSize,user.getId());
+        return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
     }
 
     @Override
@@ -174,7 +175,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("recommendation document not found!");
         }
 
-       return buildPaginationResponse(list,pageNumber,pageSize,user.getId());
+        return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
     }
 
     @Override
@@ -188,7 +189,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("recommendation document not found!");
         }
 
-      return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
+        return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
     }
 
     @Override
@@ -201,12 +202,12 @@ public class BookServiceImpl implements BookService {
         if (list.isEmpty()) {
             throw new NotFoundException("recommendation document not found!");
         }
-    return buildPaginationResponse(list,pageNumber,pageSize, user.getId());
+        return buildPaginationResponse(list, pageNumber, pageSize, user.getId());
     }
 
     @Override
     public List<BookDocument> getAllBookDoc(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber-1, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
         return bookDocRepo.findAll(pageable).stream().toList();
     }
 
@@ -218,9 +219,9 @@ public class BookServiceImpl implements BookService {
                 .findById(book.getId()).orElse(null);
         if (bookDocument == null) {
             BookDocument bookDoc = BookMapper.toBookDocument(book);
-          return   getBookResponseById(bookDoc,user.getId());
+            return getBookResponseById(bookDoc, user.getId());
         }
-        return   getBookResponseById(bookDocument,user.getId());
+        return getBookResponseById(bookDocument, user.getId());
     }
 
     @Override
@@ -231,12 +232,99 @@ public class BookServiceImpl implements BookService {
                 .findById(book.getId()).orElse(null);
         if (bookDocument == null) {
             BookDocument bookDoc = BookMapper.toBookDocument(book);
-           return toResponse(bookDoc,user.getId());
+            return toResponse(bookDoc, user.getId());
         }
-        return  toResponse(bookDocument,user.getId());
+        return toResponse(bookDocument, user.getId());
     }
 
-    private BookResponseById getBookResponseById(BookDocument bookDoc,Long userId) {
+    @Override
+    public PaginationResponse<AllBookResponse> getAllBook(int pageNumber, int pageSize) {
+        int offset = (pageNumber - 1) * pageSize;
+        Iterable<BookDocument> all = bookDocRepo.findAll();
+
+        List<BookDocument> bookList = StreamSupport
+                .stream(all.spliterator(), false)
+                .sorted(Comparator.comparing(BookDocument::getPublicationDate).reversed())
+                .toList();
+
+        int totalElements = bookList.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+        List<AllBookResponse> allBookResponses = bookList.stream()
+                .skip(offset)
+                .limit(pageSize)
+                .map(doc -> {
+                    AllBookResponse response = new AllBookResponse();
+                    response.setId(doc.getId());
+                    response.setAuthors(doc.getAuthors());
+                    response.setNew(doc.isNew());
+                    response.setGenres(doc.getGenres());
+                    response.setPublicationDate(doc.getPublicationDate());
+                    response.setBestseller(doc.isBestseller());
+                    response.setBookName(doc.getBookName());
+                    response.setBannerUrl(doc.getBannerUrl());
+                    response.setSanat(doc.isSanat());
+                    response.setSoon(doc.isSoon());
+                    return response;
+                })
+                .toList();
+        return PaginationResponse.<AllBookResponse>builder()
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .content(allBookResponses)
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public String updatedIsNew(Long bookId, boolean isNew) {
+        Book book = bookRepo.getBookByBookIdOrElseThrow(bookId);
+        BookDocument bookDocument = bookDocRepo.findByIdOrElseThrow(bookId);
+        book.setNew(isNew);
+        bookRepo.save(book);
+        bookDocument.setNew(book.isNew());
+        bookDocRepo.save(bookDocument);
+        return "success";
+    }
+
+    @Override
+    @Transactional
+    public String updatedIsSanat(Long bookId, boolean isSanat) {
+        Book book = bookRepo.getBookByBookIdOrElseThrow(bookId);
+        BookDocument bookDocument = bookDocRepo.findByIdOrElseThrow(bookId);
+        book.setNew(isSanat);
+        bookRepo.save(book);
+        bookDocument.setNew(book.isSanat());
+        bookDocRepo.save(bookDocument);
+        return "success";
+    }
+
+    @Override
+    @Transactional
+    public String updatedIsBestseller(Long bookId, boolean isBestseller) {
+        Book book = bookRepo.getBookByBookIdOrElseThrow(bookId);
+        BookDocument bookDocument = bookDocRepo.findByIdOrElseThrow(bookId);
+        book.setNew(isBestseller);
+        bookRepo.save(book);
+        bookDocument.setNew(book.isBestseller());
+        bookDocRepo.save(bookDocument);
+        return "success";
+    }
+
+    @Override
+    @Transactional
+    public String updatedIsSoon(Long bookId, boolean isSoon) {
+        Book book = bookRepo.getBookByBookIdOrElseThrow(bookId);
+        BookDocument bookDocument = bookDocRepo.findByIdOrElseThrow(bookId);
+        book.setNew(isSoon);
+        bookRepo.save(book);
+        bookDocument.setNew(book.isSoon());
+        bookDocRepo.save(bookDocument);
+        return "success";
+    }
+
+    private BookResponseById getBookResponseById(BookDocument bookDoc, Long userId) {
         return BookResponseById.builder()
                 .id(bookDoc.getId())
                 .bookName(bookDoc.getBookName())
@@ -251,7 +339,8 @@ public class BookServiceImpl implements BookService {
                 .isHistory(bookDoc.getUserIds() != null && bookDoc.getUserIds().contains(userId))
                 .build();
     }
-    private BookByIdForPlayerResponse toResponse(BookDocument bookDoc,Long userId) {
+
+    private BookByIdForPlayerResponse toResponse(BookDocument bookDoc, Long userId) {
         return BookByIdForPlayerResponse.builder()
                 .id(bookDoc.getId())
                 .bookName(bookDoc.getBookName())
@@ -261,6 +350,7 @@ public class BookServiceImpl implements BookService {
                 .chapters(bookDoc.getChapters().stream().map(this::toResponse).toList())
                 .build();
     }
+
     private ChapterResponse toResponse(BookChaptersDocument bookChaptersDocument) {
         return ChapterResponse.builder()
                 .id(bookChaptersDocument.getId())
@@ -274,6 +364,7 @@ public class BookServiceImpl implements BookService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return userRepository.getUserByEmailOrElseThrow(email);
     }
+
     private PaginationResponse<BookResponse> buildPaginationResponse(
             List<BookDocument> documents,
             int pageNumber,
