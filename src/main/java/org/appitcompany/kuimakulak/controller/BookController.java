@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookByIdForPlayerResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
@@ -99,4 +100,11 @@ public class BookController {
     public BookResponseById findById(@RequestParam Long bookId){
      return bookService.findById(bookId);
     }
+    @Secured("USER")
+    @GetMapping("/findByIdPlayer")
+    @Operation(summary = "find by id for player", description = "only user can find by id")
+    public BookByIdForPlayerResponse findByIdPlayer(@RequestParam Long bookId){
+        return bookService.findByIdPlayer(bookId);
+    }
+
 }
