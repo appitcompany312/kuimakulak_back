@@ -40,7 +40,7 @@ public class ChannelController {
 
     @Secured("ADMIN")
     @Operation(summary = "deleted channel",description = "only admins can deleted channel")
-    @PostMapping("/updatedCannel")
+    @PostMapping("/deletedCannel")
     public ResponseEntity<?> deletedCannel(@RequestParam Long channelId){
         return channelService.deletedCannel(channelId);
     }

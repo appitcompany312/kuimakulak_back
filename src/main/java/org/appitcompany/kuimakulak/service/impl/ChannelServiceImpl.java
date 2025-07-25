@@ -88,6 +88,16 @@ public class ChannelServiceImpl implements ChannelService {
     public ResponseEntity<?> updatedCannel(ChannelRequest channelRequest, Long channelId) {
         Channel channel = channelRepo.findById(channelId)
                 .orElseThrow(() -> new NotFoundException("Channel not found"));
+       if(!channel.getChannelName().equals(channelRequest.getChannelName())) {
+           Channel channel1 = channelRepo.findByChannelName(channelRequest.getChannelName())
+                   .stream()
+                   .findFirst()
+                   .orElse(null);
+
+           if (channel1 != null) {
+               throw new CustomAlreadyExistsException("Channel already exists " + channelRequest.getChannelName());
+           }
+       }
 
         List<PodcastDocument> oldDocuments = podcastDocRepo.findByChannelName(channel.getChannelName());
         List<Podcast> oldPodcasts = podcastRepo.findByChannel(channel);

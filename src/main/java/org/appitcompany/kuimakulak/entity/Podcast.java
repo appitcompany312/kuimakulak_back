@@ -29,12 +29,12 @@ public class Podcast {
     @JoinColumn(name = "channel_id")
     private Channel channel;
 
-    @OneToMany(mappedBy = "podcast")
+    @OneToMany(mappedBy = "podcast", cascade = CascadeType.ALL ,orphanRemoval = true)
     private List<Rating> ratings  = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "podcasts")
+    @ManyToMany(mappedBy = "podcasts", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Favorite> favorites = new ArrayList<>();
 
-    @OneToMany(mappedBy = "podcast")
+    @OneToMany(mappedBy = "podcast", cascade = CascadeType.ALL, orphanRemoval = true)
     private  List<History> history  = new ArrayList<>();
 }
