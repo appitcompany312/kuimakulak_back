@@ -4,9 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.podcastDto.PodcastRequest;
-import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
-import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponseById;
+import org.appitcompany.kuimakulak.dto.bookDto.AllBookResponse;
+import org.appitcompany.kuimakulak.dto.podcastDto.*;
 import org.appitcompany.kuimakulak.entity.Channel;
 import org.appitcompany.kuimakulak.entity.Podcast;
 import org.appitcompany.kuimakulak.entity.User;
@@ -25,11 +24,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +50,7 @@ public class PodcastServiceImpl implements PodcastService {
                 .findFirst()
                 .orElse(null);
         if (channel == null) {
-            throw new NotFoundException("channel not found! Add channel first!!! " + channel);
+            throw new NotFoundException("channel not found! Add channel first!!! " + podcastRequest.getChannelName());
         }
         Podcast newPodcast = new Podcast();
         newPodcast.setPodcastName(podcastRequest.getPodcastName());
@@ -118,6 +116,70 @@ public class PodcastServiceImpl implements PodcastService {
         }
         assert podcastDocument != null;
         return getPodcastResponseById(podcastDocument, user.getId());
+    }
+
+    @Override
+    public PaginationResponse<AllPodcastResponse> getAllPodcast(int pageNumber, int pageSize) {
+        User user = getCurrentUser();
+        int offset = (pageNumber - 1) * pageSize;
+        Iterable<PodcastDocument> all = podcastDocRepo.findAll();
+        List<PodcastDocument> list = StreamSupport
+                .stream(all.spliterator(), false)
+                .sorted(Comparator.comparing(PodcastDocument::getPublicationDate).reversed())
+                .toList();
+        int totalElements = list.size();
+        int totalPages = (int) Math.ceil((double) totalElements / pageSize);
+        List<AllPodcastResponse> allResponses = list.stream()
+                .skip(offset)
+                .limit(pageSize)
+                .map(doc -> {
+                    AllPodcastResponse response = new AllPodcastResponse();
+                    response.setId(doc.getId());
+                    response.setPodcastName(doc.getPodcastName());
+                    response.setBannerUrl(doc.getBannerUrl());
+                    response.setAudioUrl(doc.getAudioUrl());
+                    response.setChannelName(doc.getChannelName());
+                    response.setChannelAuthor(doc.getChannelAuthor());
+                    return response;
+                })
+                .toList();
+        return PaginationResponse.<AllPodcastResponse>builder()
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .content(allResponses)
+                .build();
+    }
+
+
+
+    @Override
+    public ResponseEntity<?> deleted(Long podcastId) {
+        Podcast podcast = podcastRepo.findByIdOrElseThrow(podcastId);
+        PodcastDocument doc = podcastDocRepo.findById(podcast.getId())
+                .orElseThrow(() -> new NotFoundException("Podcast document not found"));
+        podcastRepo.delete(podcast);
+        podcastDocRepo.delete(doc);
+        return ResponseEntity.ok().body("Podcast deleted successfully");
+    }
+
+    @Override
+    public ResponseEntity<?> updated(UpdatedPodcastRequest updatedRequest, Long podcastId) {
+        Podcast podcast = podcastRepo.findByIdOrElseThrow(podcastId);
+        PodcastDocument doc = podcastDocRepo.findById(podcast.getId())
+                .orElseThrow(() -> new NotFoundException("Podcast document not found"));
+        podcast.setPodcastName(updatedRequest.getPodcastName());
+        podcast.setBannerUrl(updatedRequest.getBannerUrl());
+        podcast.setDescription(updatedRequest.getDescription());
+        podcast.setAudioUrl(updatedRequest.getAudioUrl());
+        podcastRepo.save(podcast);
+        doc.setPodcastName(podcast.getPodcastName());
+        doc.setBannerUrl(podcast.getBannerUrl());
+        doc.setAudioUrl(podcast.getAudioUrl());
+        doc.setDescription(podcast.getDescription());
+        podcastDocRepo.save(doc);
+        return ResponseEntity.ok("Podcast updated successfully");
     }
 
     private PodcastResponseById getPodcastResponseById(PodcastDocument podcastDocument, Long userId) {

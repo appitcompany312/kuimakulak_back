@@ -5,10 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
-import org.appitcompany.kuimakulak.dto.podcastDto.PodcastRequest;
-import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
-import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponseById;
+import org.appitcompany.kuimakulak.dto.podcastDto.*;
 import org.appitcompany.kuimakulak.service.PodcastService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -27,28 +24,54 @@ public class PodcastController {
     public List<PodcastDocument> getAllPodcastDoc(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize) {
-   return podcastService.getAllPodcastDoc(pageNumber,pageSize);
+        return podcastService.getAllPodcastDoc(pageNumber, pageSize);
     }
 
     @Secured("ADMIN")
-    @Operation(summary = "save book", description = "only admins can add books")
+    @GetMapping("getAllPodcast")
+    @Operation(summary = "Get all podcasts")
+    public PaginationResponse<AllPodcastResponse> getAllPodcast(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "16") int pageSize) {
+        return podcastService.getAllPodcast(pageNumber, pageSize);
+    }
+
+    @Secured("ADMIN")
+    @Operation(summary = "save podcast", description = "only admins can add podcast")
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody PodcastRequest podcastRequest) {
         return podcastService.save(podcastRequest);
     }
+
+    @Secured("ADMIN")
+    @Operation(summary = "updated podcast", description = "only admins can updated podcast")
+    @PostMapping("/updated")
+    public ResponseEntity<?> updated(@Valid @RequestBody UpdatedPodcastRequest updatedRequest,
+                                     @RequestParam Long podcastId) {
+        return podcastService.updated(updatedRequest,podcastId);
+    }
+
+    @Secured("ADMIN")
+    @Operation(summary = "deleted podcast", description = "only admins can deleted podcast")
+    @PostMapping("/deleted")
+    public ResponseEntity<?> deleted(@RequestParam Long podcastId) {
+        return podcastService.deleted(podcastId);
+    }
+
     @Secured("USER")
-    @Operation(summary = "get podcasts by channel name" , description = "only admins can add books")
+    @Operation(summary = "get podcasts by channel name", description = "only admins can add books")
     @GetMapping("/getPodcastsByChannelName")
     public PaginationResponse<PodcastResponse> getPodcastsByChannelName(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize,
-            @RequestParam String channelName){
-    return podcastService.getPodcastsByChannelName(pageNumber,pageSize,channelName);
+            @RequestParam String channelName) {
+        return podcastService.getPodcastsByChannelName(pageNumber, pageSize, channelName);
     }
+
     @Secured("USER")
     @GetMapping("/findById")
     @Operation(summary = "find by id podcast", description = "only user can find by id")
-    public PodcastResponseById findById(@RequestParam Long podcastId){
+    public PodcastResponseById findById(@RequestParam Long podcastId) {
         return podcastService.findById(podcastId);
     }
 }
