@@ -1,18 +1,18 @@
 services:
-  # This is the new service for your Spring Boot app
+
   app:
-    build: . # This tells Docker Compose to look for a Dockerfile here and build it
+    build: .
     container_name: kuimakulak_app
     restart: unless-stopped
     ports:
-      - "8080:8080" # Maps port 8080 on the EC2 instance to port 8080 in the container
+      - "8080:8080"
     depends_on:
       - postgres_primary
       - elasticsearch
     networks:
       - my_network
     environment:
-      # These variables tell Spring how to connect to the other containers
+
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_primary:5432/kuimakulak
       - SPRING_DATASOURCE_USERNAME=prod_admin
       - SPRING_DATASOURCE_PASSWORD=pass123!
@@ -29,7 +29,7 @@ services:
     ports:
       - "5434:5432"
     volumes:
-      - postgres_primary_data:/var/lib/postgresql/data # Persists DB data
+      - postgres_primary_data:/var/lib/postgresql/data
     networks:
       - my_network
 
@@ -46,12 +46,12 @@ services:
     networks:
       - my_network
 
-# Defines the shared network for the services
+
 networks:
   my_network:
     driver: bridge
 
-# Defines the named volume for persisting postgres data
+
 volumes:
   postgres_primary_data:
     driver: local

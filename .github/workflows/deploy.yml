@@ -3,7 +3,7 @@ name: Build and Deploy to EC2
 on:
   push:
     branches:
-      - main # This workflow runs when you push to the 'main' branch
+      - main
 
 jobs:
   deploy:
@@ -31,7 +31,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           source: "."
-          target: "~/app" # Copy everything to a folder named 'app' in the home directory
+          target: "~/app"
 
       - name: Deploy on EC2
         uses: appleboy/ssh-action@master
