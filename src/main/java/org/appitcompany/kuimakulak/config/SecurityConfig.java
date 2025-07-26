@@ -39,6 +39,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SecurityConfig {
 
+    @Value("${app.base-url}")
+    private String baseUrl;
     private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtUtil jwtUtil;
@@ -96,7 +98,7 @@ public class SecurityConfig {
 
     private ClientRegistration buildGoogleClientRegistration() {
         String resolvedRedirectUri = googleProps.getRedirectUri()
-                .replace("{baseUrl}", "http://localhost:8080")
+                .replace("{baseUrl}", baseUrl)
                 .replace("{registrationId}", REGISTRATION_ID_GOOGLE);
 
         List<String> scopes = Arrays.stream(googleProps.getScope().split(","))
@@ -123,7 +125,7 @@ public class SecurityConfig {
 
     private ClientRegistration buildAppleClientRegistration() {
         String resolvedRedirectUri = appleProps.getRedirectUri()
-                .replace("{baseUrl}", "http://localhost:8080")
+                .replace("{baseUrl}", baseUrl)
                 .replace("{registrationId}", REGISTRATION_ID_APPLE);
 
         List<String> scopes = Arrays.stream(appleProps.getScope().split(","))

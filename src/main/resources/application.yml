@@ -19,7 +19,7 @@ spring:
     change-log: db/changelog/main-changelog.yaml
     enabled: true
   profiles:
-    active: prod
+    active: test
   ##elasticsearch
   data:
     elasticsearch:
@@ -43,6 +43,9 @@ app:
     refresh-token:
       expiration-ms: 15552000000
 
+server:
+  port: 8080
+
 apple:
   team-id: APPLE_TEAM_ID
   key-id: APPLE_KEY_ID
@@ -53,9 +56,6 @@ apple:
   authorization-uri: https://appleid.apple.com/auth/authorize
   token-uri: https://appleid.apple.com/auth/token
   jwk-set-uri: https://appleid.apple.com/auth/keys
-
-server:
-  port: 8080
 
 logging:
   level:
