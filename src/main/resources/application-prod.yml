@@ -8,4 +8,4 @@ spring:
     driver-class-name: org.postgresql.Driver
 
 app:
-  base-url: http://13.48.248.246:8084
+  base-url: http://13.48.248.246:8080
