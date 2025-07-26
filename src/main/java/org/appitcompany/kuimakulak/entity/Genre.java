@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,5 +21,9 @@ public class Genre {
     private LocalDate addedDate;
 
     @ManyToMany
-    private List<Book> books;
+    @JoinTable(
+            name = "genre_books",
+            joinColumns = @JoinColumn(name = "genre_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private List<Book> books  = new ArrayList<>();
 }

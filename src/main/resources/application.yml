@@ -1,3 +1,77 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 1000MB
+      max-file-size: 10000MB
+      max-request-size: 80000MB
   application:
     name: KuimaKulak
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  ## migration
+  liquibase:
+    change-log: db/changelog/main-changelog.yaml
+    enabled: true
+  profiles:
+    active: test
+  ##elasticsearch
+  data:
+    elasticsearch:
+      uris: http://localhost:9200
+      socket-timeout: 10s
+
+google:
+  client-id: 492537232969-g2cdddrm2todlat6at2a7acp2nge5gas.apps.googleusercontent.com
+  client-secret: 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
+  scope: openid, profile, email
+  redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+  authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+  token-uri: https://oauth2.googleapis.com/token
+  user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+  jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    expiration-ms: 864000000
+    refresh-token:
+      expiration-ms: 15552000000
+
+server:
+  port: 8080
+
+apple:
+  team-id: APPLE_TEAM_ID
+  key-id: APPLE_KEY_ID
+  private-key-path: classpath:apple-private-key.p8
+  client-id: APPLE_SERVICES_ID
+  scope: name, email
+  redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+  authorization-uri: https://appleid.apple.com/auth/authorize
+  token-uri: https://appleid.apple.com/auth/token
+  jwk-set-uri: https://appleid.apple.com/auth/keys
+
+logging:
+  level:
+    org.springframework.security.oauth2: DEBUG
+
+cloud:
+  aws:
+    credentials:
+      access-key: AKIAROR2VEODLMK37XVN
+      secret-key: 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
+    region:
+      static: eu-north-1
+    s3:
+      bucket: kuima-kulak
+
+user:
+  default:
+    avatar: https://kuima-kulak.s3.eu-north-1.amazonaws.com/f6a19d2f-c262-4457-8daf-bb8d9bd23e92_Persoanl.png
+

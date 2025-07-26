@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,8 +23,9 @@ public class Listeners {
     private int countListeners;
 
     @OneToOne
+    @JoinColumn(name = "book_id")
     private Book book;
 
     @OneToMany
-    private List<User> users;
+    private List<User> users  = new ArrayList<>();
 }

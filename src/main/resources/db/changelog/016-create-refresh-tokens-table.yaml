@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16
+      author: nursultan
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: refresh_tokens
+      changes:
+        - createTable:
+            tableName: refresh_tokens
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: token
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: created_at
+                  type: timestamp(6)
+              - column:
+                  name: expiry_date
+                  type: timestamp(6)
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: user_id_fk
+                    referencedTableName: users
+                    referencedColumnNames: id
+

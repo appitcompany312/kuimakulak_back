@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -19,15 +20,14 @@ public class Favorite {
     @Id
     @GeneratedValue(generator = "favorite_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "favorite_gen", sequenceName = "favorite_seq", allocationSize = 1, initialValue = 100)
-    private Long favoriteId;
-    private LocalDate savedDate;
+    private Long id;
 
-    @ManyToOne
-    private Podcast podcast;
+    @ManyToMany
+    private List<Podcast> podcasts = new ArrayList<>();
 
-    @ManyToOne
-    private Book book;
+    @ManyToMany
+    private List<Book> books  = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne
     private User user;
 }

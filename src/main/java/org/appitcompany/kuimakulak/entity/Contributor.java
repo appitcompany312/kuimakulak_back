@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,12 +18,16 @@ public class Contributor {
     @GeneratedValue(generator = "contributor_gen", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "contributor_gen", sequenceName = "contributor_seq", allocationSize = 1, initialValue = 100)
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String fullName;
 
     @Enumerated(EnumType.STRING)
     private ContributorRole role;
 
-    @ManyToMany(mappedBy = "contributors")
-    private Set<Book> audios;
+    @ManyToMany
+    @JoinTable(
+            name = "contributor_books",
+            joinColumns = @JoinColumn(name = "contributor_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private Set<Book> books  = new HashSet<>();
 }

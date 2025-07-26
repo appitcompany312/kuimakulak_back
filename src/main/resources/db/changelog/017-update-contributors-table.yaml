@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17
+      author: nursultan
+      changes:
+        - dropColumn:
+            columnName: first_name
+            tableName: contributors
+        - dropColumn:
+            columnName: last_name
+            tableName: contributors
+        - addColumn:
+            tableName: contributors
+            columns:
+              - column:
+                  name: full_name
+                  type: varchar(500)

@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18
+      author: akzhol
+      comment: "Insert default admin user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "nextval('user_seq')"
+              - column:
+                  name: email
+                  value: "admin_kuima_kulak@gmail.com"
+              - column:
+                  name: password
+                  value: "$2a$12$emKauH077wL3QXPQJ.oNzukmfUVs4ZJcXVdJfDVdUllYL/PuS9KpC"
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "User"
+              - column:
+                  name: image_url
+                  value: "https://kuima-kulak.s3.eu-north-1.amazonaws.com/f6a19d2f-c262-4457-8daf-bb8d9bd23e92_Persoanl.png"
+              - column:
+                  name: role
+                  value: "ADMIN"
+              - column:
+                  name: joined_date
+                  valueDate: "CURRENT_DATE"

@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: nursultan
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: genre
+      changes:
+        - createSequence:
+            sequenceName: genre_seq
+            startValue: 100
+            incrementBy: 1
+        - createTable:
+            tableName: genre
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: added_date
+                  type: date
+              - column:
+                  name: genre_name
+                  type: varchar(255)

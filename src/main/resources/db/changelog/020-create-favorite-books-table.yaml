@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20
+      author: nursultan
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: favorite_books
+      changes:
+        - createTable:
+            tableName: favorite_books
+            columns:
+              - column:
+                  name: favorites_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: favorites_id_fk
+                    referencedTableName: favorite
+                    referencedColumnNames: id
+              - column:
+                  name: books_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: book_id_fk
+                    referencedTableName: books
+                    referencedColumnNames: id

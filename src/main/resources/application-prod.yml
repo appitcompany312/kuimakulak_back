@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: KuimaKulak
+  datasource:
+    url: jdbc:postgresql://13.48.248.246:5434/kuimakulak
+    username: prod_admin
+    password: pass123!
+    driver-class-name: org.postgresql.Driver
+
+app:
+  base-url: http://13.48.248.246:8084
