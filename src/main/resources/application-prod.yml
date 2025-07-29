@@ -2,10 +2,10 @@ spring:
   application:
     name: KuimaKulak
   datasource:
-    url: jdbc:postgresql://13.48.248.246:5434/kuimakulak
+    url: jdbc:postgresql://localhost:5434/kuimakulak
     username: prod_admin
     password: pass123!
     driver-class-name: org.postgresql.Driver
 
 app:
-  base-url: http://13.48.248.246:8080
+  base-url: http://62.171.147.215:8080
