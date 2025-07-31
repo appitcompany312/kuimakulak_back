@@ -30,3 +30,6 @@ networks:
 
 volumes:
   postgres_primary_data:
+
+
+

@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.repository;
+package org.appitcompany.kuimakulak.elasticRepository;
 
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
@@ -6,12 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 import java.util.List;
 
-
-@EnableElasticsearchRepositories
 public interface BookDocRepo extends ElasticsearchRepository<BookDocument,Long> {
     @Query("""
     {

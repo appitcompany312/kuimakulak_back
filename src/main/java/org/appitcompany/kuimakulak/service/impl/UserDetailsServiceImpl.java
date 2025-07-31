@@ -1,6 +1,6 @@
 package org.appitcompany.kuimakulak.service.impl;
 
-import org.appitcompany.kuimakulak.repository.UserRepository;
+import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.repository;
+package org.appitcompany.kuimakulak.jpaRepository;
 
 import org.appitcompany.kuimakulak.entity.Contributor;
 import org.appitcompany.kuimakulak.enums.ContributorRole;

@@ -6,7 +6,7 @@ import org.appitcompany.kuimakulak.dto.userDto.UserProfileUpdateRequest;
 import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.exceptions.UnauthorizedException;
 import org.appitcompany.kuimakulak.mapper.UserMapper;
-import org.appitcompany.kuimakulak.repository.UserRepository;
+import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
 import org.appitcompany.kuimakulak.service.AmazonS3Service;
 import org.appitcompany.kuimakulak.service.UserService;
 import org.springframework.beans.factory.annotation.Value;

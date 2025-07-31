@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.repository;
+package org.appitcompany.kuimakulak.jpaRepository;
 
 import org.appitcompany.kuimakulak.entity.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.genreDto.GenreRequest;
 import org.appitcompany.kuimakulak.entity.Genre;
 import org.appitcompany.kuimakulak.exceptions.CustomAlreadyExistsException;
-import org.appitcompany.kuimakulak.repository.GenreRepo;
+import org.appitcompany.kuimakulak.jpaRepository.GenreRepo;
 import org.appitcompany.kuimakulak.service.GenreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
