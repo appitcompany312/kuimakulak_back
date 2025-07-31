@@ -1,4 +1,4 @@
-package org.appitcompany.kuimakulak.repository;
+package org.appitcompany.kuimakulak.elasticRepository;
 
 import org.appitcompany.kuimakulak.document.PodcastDocument;
 import org.springframework.data.domain.Page;
@@ -9,7 +9,6 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 import java.util.List;
 
-@EnableElasticsearchRepositories
 public interface PodcastDocRepo extends ElasticsearchRepository<PodcastDocument,Long> {
     @Query("""
     {

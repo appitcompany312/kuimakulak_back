@@ -8,17 +8,16 @@ import org.appitcompany.kuimakulak.entity.Book;
 import org.appitcompany.kuimakulak.entity.Podcast;
 import org.appitcompany.kuimakulak.entity.Rating;
 import org.appitcompany.kuimakulak.entity.User;
-import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
 import org.appitcompany.kuimakulak.mapper.PodcastMapper;
-import org.appitcompany.kuimakulak.repository.*;
+import org.appitcompany.kuimakulak.jpaRepository.*;
+import org.appitcompany.kuimakulak.elasticRepository.BookDocRepo;
+import org.appitcompany.kuimakulak.elasticRepository.PodcastDocRepo;
 import org.appitcompany.kuimakulak.service.RatingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 
 @Service

@@ -1,110 +1,32 @@
-version: "3.8"
-
 services:
-  app:
-    image: kuima-kulak-app:latest
-    container_name: kuima-kulak-app
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-      - elasticsearch
+  postgres_primary:
+    image: postgres:16-alpine
+    container_name: kuimakulakcontainer_v2
+    restart: unless-stopped
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/kuima_db
-      - SPRING_DATASOURCE_USERNAME=kuima_user
-      - SPRING_DATASOURCE_PASSWORD=kuima_pass
-      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
-
-  postgres:
-    image: postgres:15
-    container_name: kuima-postgres
-    environment:
-      POSTGRES_DB: kuima_db
-      POSTGRES_USER: kuima_user
-      POSTGRES_PASSWORD: kuima_pass
+      POSTGRES_USER: prod_admin
+      POSTGRES_PASSWORD: pass123!
+      POSTGRES_DB: kuimakulak
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-
+      - postgres_primary_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+  ## elasticsearch
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
-    container_name: kuima-elasticsearch
-    environment:
-      - discovery.type=single-node
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=false
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
     ports:
       - "9200:9200"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+
+networks:
+  my_network:
+    driver: bridge
 
 volumes:
-  pgdata:
-  esdata:
-
-
-#services:
-#
-#  app:
-#    build: .
-#    container_name: kuimakulak_app
-#    restart: unless-stopped
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - postgres_primary
-#      - elasticsearch
-#    networks:
-#      - my_network
-#    environment:
-#
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_primary:5432/kuimakulak
-#      - SPRING_DATASOURCE_USERNAME=prod_admin
-#      - SPRING_DATASOURCE_PASSWORD=pass123!
-#      - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
-#
-#  postgres_primary:
-#    image: postgres:16-alpine
-#    container_name: kuimakulakcontainer_v2
-#    restart: unless-stopped
-#    environment:
-#      POSTGRES_USER: prod_admin
-#      POSTGRES_PASSWORD: pass123!
-#      POSTGRES_DB: kuimakulak
-#    ports:
-#      - "5434:5432"
-#    volumes:
-#      - postgres_primary_data:/var/lib/postgresql/data
-#    networks:
-#      - my_network
-#
-#  elasticsearch:
-#    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
-#    container_name: elasticsearch
-#    restart: unless-stopped
-#    ports:
-#      - "9200:9200"
-#      - "9300:9300"
-#    environment:
-#      - discovery.type=single-node
-#      - xpack.security.enabled=false
-#    networks:
-#      - my_network
-#
-#
-#networks:
-#  my_network:
-#    driver: bridge
-#
-#
-#volumes:
-#  postgres_primary_data:
-#    driver: local
+  postgres_primary_data:

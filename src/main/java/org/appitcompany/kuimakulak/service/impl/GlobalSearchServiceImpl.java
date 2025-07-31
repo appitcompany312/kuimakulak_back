@@ -8,10 +8,9 @@ import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
 import org.appitcompany.kuimakulak.entity.User;
-import org.appitcompany.kuimakulak.exceptions.NotFoundException;
-import org.appitcompany.kuimakulak.repository.BookDocRepo;
-import org.appitcompany.kuimakulak.repository.PodcastDocRepo;
-import org.appitcompany.kuimakulak.repository.UserRepository;
+import org.appitcompany.kuimakulak.elasticRepository.BookDocRepo;
+import org.appitcompany.kuimakulak.elasticRepository.PodcastDocRepo;
+import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
 import org.appitcompany.kuimakulak.service.GlobalSearchService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,8 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service

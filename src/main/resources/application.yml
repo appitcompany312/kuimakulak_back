@@ -21,10 +21,9 @@ spring:
   profiles:
     active: prod
   ##elasticsearch
-  data:
-    elasticsearch:
-      uris: http://localhost:9200
-      socket-timeout: 10s
+  elasticsearch:
+    uris: http://localhost:9200
+
 
 google:
   client-id: 492537232969-g2cdddrm2todlat6at2a7acp2nge5gas.apps.googleusercontent.com

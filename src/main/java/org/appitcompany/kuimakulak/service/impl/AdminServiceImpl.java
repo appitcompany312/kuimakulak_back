@@ -10,7 +10,7 @@ import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.enums.Role;
 import org.appitcompany.kuimakulak.exceptions.TokenNotFoundException;
 import org.appitcompany.kuimakulak.exceptions.UnauthorizedException;
-import org.appitcompany.kuimakulak.repository.UserRepository;
+import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
 import org.appitcompany.kuimakulak.service.AdminService;
 import org.appitcompany.kuimakulak.service.RefreshTokenService;
 import org.appitcompany.kuimakulak.service.TokenBlacklistService;
