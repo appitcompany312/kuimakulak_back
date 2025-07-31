@@ -66,7 +66,7 @@ jobs:
           echo "${SSH_PRIVATE_KEY}" > private_key.pem
           chmod 600 private_key.pem
 
-          # Use the key for SSH and SCP
+          # Use the key for SSH
           ssh -o StrictHostKeyChecking=no -i private_key.pem $SERVER_USER@$SERVER_HOST "
             # Your deployment commands from the original script go here...
             # e.g., mkdir -p /opt/kuimakulak/backup; systemctl stop kuimakulak.service; etc.
