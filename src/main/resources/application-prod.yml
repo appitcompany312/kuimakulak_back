@@ -7,5 +7,3 @@ spring:
     password: pass123!
     driver-class-name: org.postgresql.Driver
 
-app:
-  base-url: http://localhost:8080
