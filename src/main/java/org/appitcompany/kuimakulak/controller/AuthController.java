@@ -28,7 +28,7 @@ public class AuthController {
     private final OAuth2Service oAuth2Service;
 
     @PostMapping("/login/google")
-    @Operation(summary = "Login with Google")
+    @Operation(summary = "Login with Google account")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully returned AuthResponse"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
@@ -41,7 +41,7 @@ public class AuthController {
     }
 
     @PostMapping("/login/apple")
-    @Operation(summary = "Login with Google")
+    @Operation(summary = "Login with Apple account")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully returned AuthResponse"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
