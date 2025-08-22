@@ -51,7 +51,7 @@ public class AuthController {
 
 
     })
-    public ResponseEntity<AuthResponse> googleApple(AppleLoginRequest request) {
+    public ResponseEntity<AuthResponse> googleApple(@RequestBody @Valid AppleLoginRequest request) {
         return oAuth2Service.appleLogin(request, APPLE_PROVIDER);
     }
 
