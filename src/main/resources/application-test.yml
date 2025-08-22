@@ -7,14 +7,3 @@ spring:
     password: pass123!
     driver-class-name: org.postgresql.Driver
 
-#spring:
-#  application:
-#    name: KuimaKulak
-#  datasource:
-#    url: jdbc:postgresql://localhost:5454/postgres
-#    username: postgres
-#    password: nurs123
-#    driver-class-name: org.postgresql.Driver
-
-app:
-  base-url: http://localhost:8080

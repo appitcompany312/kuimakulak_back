@@ -66,7 +66,7 @@ public class RefreshTokenServiceImpl implements org.appitcompany.kuimakulak.serv
     @Override
     @Transactional
     public AuthResponse refreshAccessToken(String refreshToken) {
-        RefreshToken token = findByToken(refreshToken)
+        RefreshToken token = refreshTokenRepository.findByToken(refreshToken)
                 .map(this::verifyExpiration)
                 .orElseThrow(() -> new TokenNotFoundException("Refresh token not found in database!"));
 

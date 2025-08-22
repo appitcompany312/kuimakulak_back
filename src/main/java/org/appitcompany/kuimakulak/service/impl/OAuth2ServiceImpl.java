@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.component.JwtUtil;
 import org.appitcompany.kuimakulak.dto.auth.AppleLoginRequest;
 import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
+import org.appitcompany.kuimakulak.entity.RefreshToken;
 import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.enums.Role;
 import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
@@ -172,8 +173,8 @@ public class OAuth2ServiceImpl implements org.appitcompany.kuimakulak.service.OA
 
     private AuthResponse generateAuthResponse(User user) {
         String jwt = jwtUtil.generateAccessToken(user);
-        String refreshToken = jwtUtil.generateRefreshToken(user);
-        return new AuthResponse(jwt, refreshToken);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+        return new AuthResponse(jwt, refreshToken.getToken());
     }
 
     public User parseAppleIdToken(String idToken) throws Exception {
