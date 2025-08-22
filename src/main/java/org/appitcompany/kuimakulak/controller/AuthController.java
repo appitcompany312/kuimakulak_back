@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,7 +37,8 @@ public class AuthController {
 
 
     })
-    public ResponseEntity<AuthResponse> googleLogin(String googleAccessToken) {
+    public ResponseEntity<AuthResponse> googleLogin(
+            @RequestParam("googleAccessToken") String googleAccessToken) {
         return oAuth2Service.handleGoogleLogin(googleAccessToken, GOOGLE_PROVIDER);
     }
 
