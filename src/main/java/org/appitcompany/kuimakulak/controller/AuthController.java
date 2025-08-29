@@ -47,7 +47,7 @@ public class AuthController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully returned AuthResponse"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or expired")
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or expired.")
 
 
     })
