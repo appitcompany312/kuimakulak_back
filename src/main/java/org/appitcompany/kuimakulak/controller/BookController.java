@@ -28,7 +28,7 @@ public class BookController {
     }
     @Secured("ADMIN")
     @GetMapping("getAllBook")
-    @Operation(summary = "Get all Book", description = "only admins can get all books")
+    @Operation(summary = "Get all Book(\"ADMIN\")", description = "only admins can get all books")
     public PaginationResponse<AllBookResponse> getAllBook(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize) {
@@ -36,7 +36,7 @@ public class BookController {
     }
 
    @Secured("ADMIN")
-    @Operation(summary = "save book",description = "only admins can add books")
+    @Operation(summary = "save book(\"ADMIN\")",description = "only admins can add books")
    @PostMapping("/save")
     public ResponseEntity<?> saveBook(@Valid @RequestBody BookRequest bookRequest){
         return bookService.saveBook(bookRequest);
@@ -111,21 +111,21 @@ public class BookController {
         return bookService.findByIdPlayer(bookId);
     }
     @Secured("ADMIN")
-    @Operation(summary = "updated isNew in book",description = "only admins can")
+    @Operation(summary = "updated isNew in book(\"ADMIN\")",description = "only admins can")
     @PostMapping("/updatedIsNew")
     public String updatedIsNew(@RequestParam Long bookId,
                                @RequestParam boolean isNew ){
         return bookService.updatedIsNew(bookId,isNew);
     }
     @Secured("ADMIN")
-    @Operation(summary = "updated isSanat in book" ,description = "only admins can")
+    @Operation(summary = "updated isSanat in book(\"ADMIN\")" ,description = "only admins can")
     @PostMapping("/updatedIsSanat")
     public String updatedIsSanat(@RequestParam Long bookId,
                                @RequestParam boolean isSanat ){
         return bookService.updatedIsSanat(bookId,isSanat);
     }
     @Secured("ADMIN")
-    @Operation(summary = "updated isBestseller in book",description = "only admins can")
+    @Operation(summary = "updated isBestseller in book(\"ADMIN\")",description = "only admins can")
     @PostMapping("/updatedIsBestseller")
     public String updatedIsBestseller(@RequestParam Long bookId,
                                @RequestParam boolean isBestseller ){

@@ -29,7 +29,7 @@ public class AdminAuthController {
     private final AdminService adminService;
 
     @PostMapping("/login")
-    @Operation(summary = "Login endpoint for the admin")
+    @Operation(summary = "Login endpoint for the admin(\"ADMIN\")")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully logged in and returned the token"),
             @ApiResponse(responseCode = "401", description = "Invalid login credentials"),
@@ -43,7 +43,7 @@ public class AdminAuthController {
 
     @PostMapping("/token/refresh")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Refresh JWT access token using a refresh token")
+    @Operation(summary = "Refresh JWT access token using a refresh token(\"ADMIN\")")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully refreshed token"),
             @ApiResponse(responseCode = "400", description = "Invalid refresh token request"),
@@ -56,7 +56,7 @@ public class AdminAuthController {
 
     @PostMapping("/logout")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Logout admin by blacklisting access token and deleting refresh token")
+    @Operation(summary = "Logout admin by blacklisting access token and deleting refresh token(\"ADMIN\")")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully logged out"),
             @ApiResponse(responseCode = "400", description = "Logout failed due to bad request"),
@@ -70,7 +70,7 @@ public class AdminAuthController {
 
     @PutMapping("/change-password")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Change admin password")
+    @Operation(summary = "Change admin password(\"ADMIN\")")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Successfully changed the password"),
             @ApiResponse(responseCode = "400", description = "Logout failed due to bad request"),

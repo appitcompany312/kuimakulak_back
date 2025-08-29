@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContributorController {
     private final ContributorService contributorService;
        @Secured("ADMIN")
-    @Operation(summary = "save  contributor",description = "only admins can add  contributors")
+    @Operation(summary = "save  contributor(\"ADMIN\")",description = "only admins can add  contributors")
     @PostMapping("/save")
     public ResponseEntity<?> saveContributor(@Valid @RequestBody ContributorRequest contributorRequest) {
         return contributorService.saveContributor(contributorRequest);

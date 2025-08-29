@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 public class ChannelController {
     private final ChannelService channelService;
     @Secured("ADMIN")
-    @Operation(summary = "save channel",description = "only admins can add channel")
+    @Operation(summary = "save channel(\"ADMIN\")",description = "only admins can add channel")
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody ChannelRequest channelRequest){
        return channelService.save(channelRequest);
     }
     @Secured("ADMIN")
-    @Operation(summary = "find all channel",description = "only admins can find all channel")
+    @Operation(summary = "find all channel(\"ADMIN\")",description = "only admins can find all channel")
     @GetMapping("/findAllChannel")
     public PaginationResponse<ChannelResponse> findAllChannel(
             @RequestParam(defaultValue = "1") int pageNumber,
@@ -31,7 +31,7 @@ public class ChannelController {
         return channelService.findAllChannel(pageSize,pageNumber);
     }
     @Secured("ADMIN")
-    @Operation(summary = "updated channel",description = "only admins can updated channel")
+    @Operation(summary = "updated channel(\"ADMIN\")",description = "only admins can updated channel")
     @PostMapping("/updatedCannel")
     public ResponseEntity<?> updatedCannel(@Valid @RequestBody ChannelRequest channelRequest,
                                            @RequestParam Long channelId){
@@ -39,7 +39,7 @@ public class ChannelController {
     }
 
     @Secured("ADMIN")
-    @Operation(summary = "deleted channel",description = "only admins can deleted channel")
+    @Operation(summary = "deleted channel(\"ADMIN\")",description = "only admins can deleted channel")
     @PostMapping("/deletedCannel")
     public ResponseEntity<?> deletedCannel(@RequestParam Long channelId){
         return channelService.deletedCannel(channelId);
