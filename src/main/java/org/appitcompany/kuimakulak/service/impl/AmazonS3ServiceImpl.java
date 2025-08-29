@@ -12,6 +12,8 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Service
@@ -70,11 +72,16 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     }
 
     private String extractFileKeyFromUrl(String url) {
-        final String domainEnd = ".com/";
-        int startIndex = url.indexOf(domainEnd);
-        if (startIndex == -1) {
-            throw new IllegalArgumentException("Invalid S3 URL format.");
+        try {
+            URI uri = new URI(url);
+            String path = uri.getPath();
+            // Путь обычно начинается с косой черты, поэтому мы удаляем ее.
+            if (path.startsWith("/")) {
+                return path.substring(1);
+            }
+            return path;
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Invalid URL format.", e);
         }
-        return url.substring(startIndex + domainEnd.length());
     }
 }
