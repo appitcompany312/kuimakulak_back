@@ -16,7 +16,7 @@ public class ChapterController {
     private final ChapterService chapterService;
 
     @Secured("ADMIN")
-    @Operation(summary = "save book chapter")
+    @Operation(summary = "save book chapter(\"ADMIN\")")
     @PostMapping("/save")
     public ResponseEntity<?> saveChapter(@Valid @RequestBody ChapterRequest chapterRequest,
                                          @RequestParam Long bookId){
