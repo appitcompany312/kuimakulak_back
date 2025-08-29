@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenreController {
     private final GenreService genreService;
     @Secured("ADMIN")
-    @Operation(summary = "save genre",description = "only admins can add genres")
+    @Operation(summary = "save genre(\"ADMIN\")",description = "only admins can add genres")
     @PostMapping("/save")
     public ResponseEntity<?> saveGenre(@Valid @RequestBody GenreRequest genreRequest){
         return genreService.saveGenre(genreRequest);

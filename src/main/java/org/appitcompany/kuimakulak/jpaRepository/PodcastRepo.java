@@ -1,5 +1,6 @@
 package org.appitcompany.kuimakulak.jpaRepository;
 
+import jakarta.validation.constraints.NotEmpty;
 import org.appitcompany.kuimakulak.entity.Channel;
 import org.appitcompany.kuimakulak.entity.Podcast;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
@@ -14,4 +15,6 @@ public interface PodcastRepo extends JpaRepository<Podcast, Long> {
     }
 
     List<Podcast> findByChannel(Channel channel);
+
+    boolean existsByPodcastNameAndIdNot(@NotEmpty(message = "the podcastName field must not be empty") String podcastName, Long podcastId);
 }
