@@ -67,7 +67,6 @@ public class AdminAuthController {
         adminService.logout(authHeader, request.refreshToken());
         return ResponseEntity.ok().build();
     }
-
     @PutMapping("/change-password")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Change admin password(\"ADMIN\")")
