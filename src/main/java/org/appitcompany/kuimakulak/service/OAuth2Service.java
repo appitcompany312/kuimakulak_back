@@ -1,12 +1,15 @@
 package org.appitcompany.kuimakulak.service;
 
-import jakarta.transaction.Transactional;
-import org.appitcompany.kuimakulak.entity.User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.appitcompany.kuimakulak.dto.auth.AppleLoginRequest;
+import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface OAuth2Service {
 
-    User processOAuth2User(String registrationId, OAuth2User oAuth2User);
 
     void logout(String authHeader, String refreshToken);
+
+    ResponseEntity<AuthResponse> handleGoogleLogin(String googleAccessToken, String googleProvider);
+
+    ResponseEntity<AuthResponse> appleLogin(AppleLoginRequest googleAccessToken, String appleProvider);
 }

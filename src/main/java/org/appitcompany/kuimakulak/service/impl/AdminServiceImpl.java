@@ -62,7 +62,7 @@ public class AdminServiceImpl implements AdminService {
         }
 
         var jwtToken = jwtUtil.generateAccessToken(user);
-        var refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getEmail());
         return new AuthResponse(jwtToken, refreshToken.getToken());
     }
 

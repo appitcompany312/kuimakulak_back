@@ -5,51 +5,56 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.appitcompany.kuimakulak.dto.auth.AppleLoginRequest;
 import org.appitcompany.kuimakulak.dto.auth.AuthResponse;
 import org.appitcompany.kuimakulak.dto.auth.TokenRefreshRequest;
 import org.appitcompany.kuimakulak.service.OAuth2Service;
 import org.appitcompany.kuimakulak.service.RefreshTokenService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    private static final String GOOGLE_PROVIDER = "google";
+    private static final String APPLE_PROVIDER = "apple";
     private final RefreshTokenService refreshTokenService;
     private final OAuth2Service oAuth2Service;
 
-    @GetMapping("/login/google")
-    @Operation(summary = "Initiate Google Login (Redirects to Google)")
+    @PostMapping("/login/google")
+    @Operation(summary = "Login with Google account")
     @ApiResponses({
-            @ApiResponse(responseCode = "302", description = "Redirect to Google Authentication")
+            @ApiResponse(responseCode = "200", description = "Successfully returned AuthResponse"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or expired")
+
+
     })
-    public ResponseEntity<Void> googleLogin() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/oauth2/authorization/google"));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    public ResponseEntity<AuthResponse> googleLogin(
+            @RequestParam("googleAccessToken") String googleAccessToken) {
+        return oAuth2Service.handleGoogleLogin(googleAccessToken, GOOGLE_PROVIDER);
     }
 
-    @GetMapping("/login/apple")
-    @Operation(summary = "Initiate Apple Login (Redirects to Apple)")
+    @PostMapping("/login/apple")
+    @Operation(summary = "Login with Apple account")
     @ApiResponses({
-            @ApiResponse(responseCode = "302", description = "Redirect to Apple Authentication")
+            @ApiResponse(responseCode = "200", description = "Successfully returned AuthResponse"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid or expired")
+
+
     })
-    public ResponseEntity<Void> initiateAppleLogin() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/oauth2/authorization/apple"));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    public ResponseEntity<AuthResponse> googleApple(@RequestBody @Valid AppleLoginRequest request) {
+        return oAuth2Service.appleLogin(request, APPLE_PROVIDER);
     }
+
 
     @PostMapping("/token/refresh")
     @Operation(summary = "Refresh JWT access token using a refresh token")
