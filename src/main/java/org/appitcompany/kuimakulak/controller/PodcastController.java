@@ -28,8 +28,8 @@ public class PodcastController {
     }
 
     @Secured("ADMIN")
-    @GetMapping("getAllPodcast(\"ADMIN\")")
-    @Operation(summary = "Get all podcasts")
+    @GetMapping("getAllPodcast")
+    @Operation(summary = "Get all podcasts(\"ADMIN\")")
     public PaginationResponse<AllPodcastResponse> getAllPodcast(
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "16") int pageSize) {
