@@ -150,14 +150,14 @@ public class PodcastServiceImpl implements PodcastService {
                 .content(allResponses)
                 .build();
     }
-
-
-
     @Override
     public ResponseEntity<?> deleted(Long podcastId) {
         Podcast podcast = podcastRepo.findByIdOrElseThrow(podcastId);
         PodcastDocument doc = podcastDocRepo.findById(podcast.getId())
                 .orElseThrow(() -> new NotFoundException("Podcast document not found"));
+        String bannerUrl = podcast.getBannerUrl();
+        String audioUrl = podcast.getAudioUrl();
+
         podcastRepo.delete(podcast);
         podcastDocRepo.delete(doc);
         return ResponseEntity.ok().body("Podcast deleted successfully");

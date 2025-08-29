@@ -28,7 +28,7 @@ public class PodcastController {
     }
 
     @Secured("ADMIN")
-    @GetMapping("getAllPodcast")
+    @GetMapping("getAllPodcast(\"ADMIN\")")
     @Operation(summary = "Get all podcasts")
     public PaginationResponse<AllPodcastResponse> getAllPodcast(
             @RequestParam(defaultValue = "1") int pageNumber,
@@ -37,14 +37,14 @@ public class PodcastController {
     }
 
     @Secured("ADMIN")
-    @Operation(summary = "save podcast", description = "only admins can add podcast")
+    @Operation(summary = "save podcast(\"ADMIN\")", description = "only admins can add podcast")
     @PostMapping("/save")
     public ResponseEntity<?> save(@Valid @RequestBody PodcastRequest podcastRequest) {
         return podcastService.save(podcastRequest);
     }
 
     @Secured("ADMIN")
-    @Operation(summary = "updated podcast", description = "only admins can updated podcast")
+    @Operation(summary = "updated podcast(\"ADMIN\")", description = "only admins can updated podcast")
     @PostMapping("/updated")
     public ResponseEntity<?> updated(@Valid @RequestBody UpdatedPodcastRequest updatedRequest,
                                      @RequestParam Long podcastId) {
@@ -52,7 +52,7 @@ public class PodcastController {
     }
 
     @Secured("ADMIN")
-    @Operation(summary = "deleted podcast", description = "only admins can deleted podcast")
+    @Operation(summary = "deleted podcast(\"ADMIN\")", description = "only admins can deleted podcast")
     @PostMapping("/deleted")
     public ResponseEntity<?> deleted(@RequestParam Long podcastId) {
         return podcastService.deleted(podcastId);
