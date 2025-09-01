@@ -1,10 +1,18 @@
 package org.appitcompany.kuimakulak.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.contributorDto.ContributorRequest;
+import org.appitcompany.kuimakulak.dto.contributorDto.ContributorsResponse;
+import org.appitcompany.kuimakulak.dto.pagination.PageResponse;
 import org.appitcompany.kuimakulak.entity.Contributor;
+import org.appitcompany.kuimakulak.enums.ContributorRole;
+import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.jpaRepository.ContributorRepo;
+import org.appitcompany.kuimakulak.mapper.ContributorMapper;
 import org.appitcompany.kuimakulak.service.ContributorService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ContributorServiceImpl implements ContributorService {
     private final ContributorRepo contributorRepo;
+    private final ContributorMapper contributorMapper;
+
     @Override
     public ResponseEntity<?> saveContributor(ContributorRequest contributorRequest) {
         List<Contributor> existingContributors = contributorRepo.findByFullName(contributorRequest.getFullName());
@@ -42,6 +52,29 @@ public class ContributorServiceImpl implements ContributorService {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Contributor has been saved successfully");
+    }
+
+    @Override
+    public PageResponse<ContributorsResponse> getAllContributorsByRole(Pageable pageable, ContributorRole role) {
+        Page<Contributor> page = contributorRepo.findByRole(role, pageable);
+        return PageResponse.fromSpringPage(
+                page.map(contributorMapper::toDto)
+        );
+    }
+
+    @Override
+    @Transactional
+    public ContributorsResponse updateContributor(long contributorId, String newFullName) {
+        Contributor contributor = contributorRepo.findById(contributorId).orElseThrow(() -> new RuntimeException("Contributor with id " + contributorId + " does not exist"));
+        contributor.setFullName(newFullName);
+        return contributorMapper.toDto(contributor);
+    }
+
+    @Override
+    public void deleteContributor(long contributorId) {
+        Contributor contributor = contributorRepo.findById(contributorId)
+                .orElseThrow(() -> new NotFoundException("Contributor with id " + contributorId + " does not exist"));
+        contributorRepo.delete(contributor);
     }
 
 }
