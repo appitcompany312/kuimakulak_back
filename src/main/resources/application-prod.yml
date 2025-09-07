@@ -3,7 +3,7 @@ spring:
     name: KuimaKulak
   datasource:
     url: jdbc:postgresql://localhost:5434/kuimakulak
-    username: prod_admin
-    password: pass123!
+    username: postgres
+    password: 1234
     driver-class-name: org.postgresql.Driver
 
