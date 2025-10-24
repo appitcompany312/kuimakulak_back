@@ -12,8 +12,8 @@ import java.util.List;
 public interface PodcastDocRepo extends ElasticsearchRepository<PodcastDocument,Long> {
     @Query("""
     {
-      "multi_match": {
-        "query": "?0",
+      "query_string": {
+        "query": "*?0*",
         "fields": ["podcastName", "description", "channelName", "channelAuthor"]
       }
     }

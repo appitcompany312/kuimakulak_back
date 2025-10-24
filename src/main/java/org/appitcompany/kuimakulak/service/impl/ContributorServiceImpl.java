@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +76,12 @@ public class ContributorServiceImpl implements ContributorService {
         Contributor contributor = contributorRepo.findById(contributorId)
                 .orElseThrow(() -> new NotFoundException("Contributor with id " + contributorId + " does not exist"));
         contributorRepo.delete(contributor);
+    }
+
+    @Override
+    public List<String> getAllAuthors() {
+        List<Contributor> byRole = contributorRepo.getByRole(ContributorRole.AUTHOR);
+        return byRole.stream().map(Contributor::getFullName).collect(Collectors.toList());
     }
 
 }

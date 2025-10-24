@@ -10,6 +10,8 @@ import org.appitcompany.kuimakulak.enums.Role;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface ContributorService {
     ResponseEntity<?> saveContributor(ContributorRequest contributorRequest);
 
@@ -18,4 +20,7 @@ public interface ContributorService {
     ContributorsResponse updateContributor(long contributorId, String newFullName);
 
     void deleteContributor(@Min(1) long contributorId);
+
+    List<String> getAllAuthors();
+
 }
