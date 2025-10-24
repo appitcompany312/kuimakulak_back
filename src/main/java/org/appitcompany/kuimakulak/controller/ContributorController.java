@@ -18,6 +18,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/contributor")
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ import org.springframework.web.bind.annotation.*;
 )
 public class ContributorController {
     private final ContributorService contributorService;
-       @Secured("ADMIN")
+    @Secured("ADMIN")
     @PostMapping("/save")
     public ResponseEntity<?> saveContributor(@Valid @RequestBody ContributorRequest contributorRequest) {
         return contributorService.saveContributor(contributorRequest);
@@ -50,7 +52,11 @@ public class ContributorController {
         Pageable pageable = PageRequest.of(page, size);
         return contributorService.getAllContributorsByRole(pageable, role);
     }
-
+    @Operation(summary = "get all Author")
+    @PostMapping("/getAllAuthors")
+    public List<String> getAllAuthors(){
+        return contributorService.getAllAuthors();
+    }
     @PutMapping("/update")
     @Secured("ADMIN")
     public ResponseEntity<?> updateContributor(@RequestParam @Min(1) long contributorId,

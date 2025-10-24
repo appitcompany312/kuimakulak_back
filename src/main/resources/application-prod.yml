@@ -2,8 +2,8 @@ spring:
   application:
     name: KuimaKulak
   datasource:
-    url: jdbc:postgresql://localhost:5434/kuimakulak
+    url: jdbc:postgresql://localhost:5432/kuima_kulak
     username: postgres
-    password: 1234
+    password: nurs123
     driver-class-name: org.postgresql.Driver
 

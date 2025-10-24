@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +29,11 @@ public class GenreServiceImpl implements GenreService {
         genreRepo.save(genre);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("genre has been saved successfully");
+    }
+
+    @Override
+    public List<String> getAllGenres() {
+        List<Genre> all = genreRepo.findAll();
+        return all.stream().map(Genre::getGenreName).collect(Collectors.toList());
     }
 }

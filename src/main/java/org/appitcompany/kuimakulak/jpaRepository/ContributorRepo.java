@@ -18,6 +18,8 @@ public interface ContributorRepo extends JpaRepository<Contributor, Long> {
     Contributor findByFullNameAndRole(@Param("translator") String translator, @Param("contributorRole") ContributorRole contributorRole);
 
     Page<Contributor> findByRole(ContributorRole role, Pageable pageable);
+
+    List<Contributor> getByRole(ContributorRole role);
 }
 
 
