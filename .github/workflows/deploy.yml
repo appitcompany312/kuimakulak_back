@@ -86,7 +86,7 @@ jobs:
             echo 'Waiting for application to start...'
             sleep 50
             if ! systemctl is-active --quiet kuimakulak.service; then exit 1; fi
-            if ! netstat -tulpn | grep :8080; then exit 1; fi
+            if ! netstat -tulpn | grep :8081; then exit 1; fi
             echo 'Deployment successful'
             rm -rf /opt/kuimakulak/new
           "
