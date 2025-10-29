@@ -24,7 +24,6 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
     private String bucketName;
 
     public String uploadFile(MultipartFile file) {
-
         if (file == null || file.isEmpty()) {
             throw new IllegalArgumentException("File is empty or missing");
         }
@@ -36,18 +35,20 @@ public class AmazonS3ServiceImpl implements AmazonS3Service {
                     .bucket(bucketName)
                     .key(key)
                     .contentType(file.getContentType())
+                    .contentLength(file.getSize())
                     .build();
 
-            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+            s3Client.putObject(putObjectRequest,
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-            return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(key)).toExternalForm();
+            return s3Client.utilities()
+                    .getUrl(builder -> builder.bucket(bucketName).key(key))
+                    .toExternalForm();
 
         } catch (IOException e) {
             throw new RuntimeException("File processing failed", e);
         } catch (SdkException e) {
             throw new RuntimeException("S3 upload failed", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Unexpected error during file upload", e);
         }
     }
 
