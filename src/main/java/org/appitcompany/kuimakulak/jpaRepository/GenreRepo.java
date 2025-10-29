@@ -12,4 +12,7 @@ public interface GenreRepo extends JpaRepository<Genre, Long> {
     Genre findByName(@Param("name") String name);
 
     List<Genre> findByGenreName(String genreName);
+
+    @Query("SELECT DISTINCT g FROM Genre g JOIN FETCH g.books")
+    List<Genre> findAllWithBooks();
 }
