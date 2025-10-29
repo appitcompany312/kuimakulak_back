@@ -2,9 +2,9 @@ spring:
   servlet:
     multipart:
       enabled: true
-      file-size-threshold: 1000MB
-      max-file-size: 10000MB
-      max-request-size: 80000MB
+      file-size-threshold: 2MB
+      max-file-size: 100MB
+      max-request-size: 105MB
   application:
     name: KuimaKulak
   jpa:
