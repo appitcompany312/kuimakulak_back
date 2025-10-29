@@ -7,6 +7,7 @@ import org.appitcompany.kuimakulak.dto.podcastDto.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PodcastService {
     ResponseEntity<?> save(PodcastRequest podcastRequest);
@@ -22,5 +23,7 @@ public interface PodcastService {
     ResponseEntity<?> deleted(Long podcastId);
 
     ResponseEntity<?> updated(@Valid UpdatedPodcastRequest updatedRequest, Long podcastId);
+
+    Map<String, List<PodcastResponse>> getPodcastCategory();
 }
 

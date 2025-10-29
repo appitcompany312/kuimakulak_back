@@ -5,13 +5,30 @@ import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.BookChaptersDocument;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.*;
-import org.appitcompany.kuimakulak.entity.*;
+import org.appitcompany.kuimakulak.dto.bookDto.AllBookResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookByIdForPlayerResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
+import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
+import org.appitcompany.kuimakulak.dto.bookDto.ChapterResponse;
+import org.appitcompany.kuimakulak.dto.genreDto.GenreResponse;
+import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
+import org.appitcompany.kuimakulak.elasticRepository.BookDocRepo;
+import org.appitcompany.kuimakulak.entity.Book;
+import org.appitcompany.kuimakulak.entity.BookChapters;
+import org.appitcompany.kuimakulak.entity.Contributor;
+import org.appitcompany.kuimakulak.entity.Genre;
+import org.appitcompany.kuimakulak.entity.Listeners;
+import org.appitcompany.kuimakulak.entity.User;
 import org.appitcompany.kuimakulak.enums.ContributorRole;
 import org.appitcompany.kuimakulak.exceptions.NotFoundException;
+import org.appitcompany.kuimakulak.jpaRepository.BookChaptersRepo;
+import org.appitcompany.kuimakulak.jpaRepository.BookRepo;
+import org.appitcompany.kuimakulak.jpaRepository.ContributorRepo;
+import org.appitcompany.kuimakulak.jpaRepository.GenreRepo;
+import org.appitcompany.kuimakulak.jpaRepository.ListenersRepo;
+import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
-import org.appitcompany.kuimakulak.jpaRepository.*;
-import org.appitcompany.kuimakulak.elasticRepository.BookDocRepo;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +41,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -324,6 +343,27 @@ public class BookServiceImpl implements BookService {
         bookDocRepo.save(bookDocument);
         return "success";
     }
+
+    @Override
+    public Map<String, List<GenreResponse>> getBooksByGenres() {
+        List<Genre> genres = genreRepo.findAllWithBooks();
+
+        return genres.stream()
+                .collect(Collectors.toMap(
+                        Genre::getGenreName,
+                        genre -> genre.getBooks().stream()
+                                .map(book -> new GenreResponse(
+                                        genre.getGenreName(),
+                                        book.getId(),
+                                        book.getBookName(),
+                                        book.getBannerUrl()
+                                ))
+                                .toList(),
+                        (existing, replacement) -> existing
+                ));
+    }
+
+
 
     private BookResponseById getBookResponseById(BookDocument bookDoc, Long userId) {
         return BookResponseById.builder()

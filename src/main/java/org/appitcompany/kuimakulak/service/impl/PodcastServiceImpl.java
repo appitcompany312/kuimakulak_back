@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -187,6 +189,30 @@ public class PodcastServiceImpl implements PodcastService {
         podcastDocRepo.save(doc);
         return ResponseEntity.ok("Podcast updated successfully");
     }
+
+    @Override
+    public Map<String, List<PodcastResponse>> getPodcastCategory() {
+        List<Podcast> podcasts = podcastRepo.findAllWithChannel();
+        return podcasts.stream()
+                .collect(Collectors.groupingBy(
+                        podcast -> podcast.getChannel().getChannelName(),
+                        Collectors.mapping(
+                                podcast -> {
+                                    PodcastResponse response = new PodcastResponse();
+                                    response.setId(podcast.getId());
+                                    response.setPodcastName(podcast.getPodcastName());
+                                    response.setAudioUrl(podcast.getAudioUrl());
+                                    response.setBannerUrl(podcast.getBannerUrl());
+                                    response.setChannelName(podcast.getChannel().getChannelName());
+                                    response.setChannelAuthor(podcast.getChannel().getChannelAuthor());
+                                    response.setHistory(!podcast.getHistory().isEmpty());
+                                    return response;
+                                },
+                                Collectors.toList()
+                        )
+                ));
+    }
+
 
     private PodcastResponseById getPodcastResponseById(PodcastDocument podcastDocument, Long userId) {
         return PodcastResponseById.builder()

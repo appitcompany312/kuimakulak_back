@@ -3,9 +3,12 @@ package org.appitcompany.kuimakulak.service;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
 import org.appitcompany.kuimakulak.dto.bookDto.*;
+import org.appitcompany.kuimakulak.dto.genreDto.GenreResponse;
+import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookService {
 
@@ -40,5 +43,8 @@ public interface BookService {
     String updatedIsBestseller(Long bookId, boolean isBestseller);
 
     String updatedIsSoon(Long bookId, boolean isSoon);
+
+    Map<String, List<GenreResponse>> getBooksByGenres();
+
 }
 
