@@ -2,6 +2,7 @@ package org.appitcompany.kuimakulak.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.genreDto.GenreRequest;
+import org.appitcompany.kuimakulak.dto.genreDto.GenresNameResponse;
 import org.appitcompany.kuimakulak.entity.Genre;
 import org.appitcompany.kuimakulak.exceptions.CustomAlreadyExistsException;
 import org.appitcompany.kuimakulak.jpaRepository.GenreRepo;
@@ -35,5 +36,13 @@ public class GenreServiceImpl implements GenreService {
     public List<String> getAllGenres() {
         List<Genre> all = genreRepo.findAll();
         return all.stream().map(Genre::getGenreName).collect(Collectors.toList());
+    }
+
+    @Override
+    public GenresNameResponse getGenresByAuthor(String author) {
+        List<String> byAuthor = genreRepo.findByAuthor(author);
+        return GenresNameResponse.builder()
+                .genres(byAuthor)
+                .build();
     }
 }

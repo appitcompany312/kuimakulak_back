@@ -46,5 +46,6 @@ public interface BookService {
 
     Map<String, List<GenreResponse>> getBooksByGenres();
 
+    List<BookResponse> filterByGenreAndAuthor(BookFilterRequest bookFilterRequest);
 }
 

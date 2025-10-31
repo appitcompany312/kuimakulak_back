@@ -138,5 +138,10 @@ public class BookController {
                                @RequestParam boolean isSoon ){
         return bookService.updatedIsSoon(bookId,isSoon);
     }
+    @Operation(summary = "get books by filtering by genre and author")
+    @PostMapping("/filterByGenreAndAuthor")
+    public  ResponseEntity<List<BookResponse>> getBooksByGenreAndAuthor(@RequestBody BookFilterRequest bookFilterRequest){
+        return ResponseEntity.ok(bookService.filterByGenreAndAuthor(bookFilterRequest));
+    }
 
 }
