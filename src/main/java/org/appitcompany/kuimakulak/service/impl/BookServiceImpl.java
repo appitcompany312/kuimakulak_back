@@ -5,12 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.document.BookChaptersDocument;
 import org.appitcompany.kuimakulak.document.BookDocument;
 import org.appitcompany.kuimakulak.dto.PaginationResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.AllBookResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookByIdForPlayerResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookRequest;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponse;
-import org.appitcompany.kuimakulak.dto.bookDto.BookResponseById;
-import org.appitcompany.kuimakulak.dto.bookDto.ChapterResponse;
+import org.appitcompany.kuimakulak.dto.bookDto.*;
 import org.appitcompany.kuimakulak.dto.genreDto.GenreResponse;
 import org.appitcompany.kuimakulak.dto.podcastDto.PodcastResponse;
 import org.appitcompany.kuimakulak.elasticRepository.BookDocRepo;
@@ -29,6 +24,7 @@ import org.appitcompany.kuimakulak.jpaRepository.GenreRepo;
 import org.appitcompany.kuimakulak.jpaRepository.ListenersRepo;
 import org.appitcompany.kuimakulak.jpaRepository.UserRepository;
 import org.appitcompany.kuimakulak.mapper.BookMapper;
+import org.appitcompany.kuimakulak.mapper.BookMapper2;
 import org.appitcompany.kuimakulak.service.BookService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -55,6 +51,7 @@ public class BookServiceImpl implements BookService {
     private final BookDocRepo bookDocRepo;
     private final BookChaptersRepo bookChaptersRepo;
     private final ListenersRepo listenersRepo;
+    private final BookMapper2 bookMapper2;
 
     @Override
     @Transactional
@@ -363,6 +360,16 @@ public class BookServiceImpl implements BookService {
                 ));
     }
 
+    @Override
+    public List<BookResponse> filterByGenreAndAuthor(BookFilterRequest bookFilterRequest) {
+        List<Book> booksByGenreAndAuthor = bookRepo.getBooksByGenreAndAuthor(bookFilterRequest.getAuthor(), bookFilterRequest.getGenre());
+        List<BookResponse> bookResponses = new ArrayList<>();
+        for (Book book : booksByGenreAndAuthor) {
+            BookResponse dto = bookMapper2.toDTO(book);
+            bookResponses.add(dto);
+        }
+        return bookResponses;
+    }
 
 
     private BookResponseById getBookResponseById(BookDocument bookDoc, Long userId) {

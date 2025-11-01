@@ -1,6 +1,7 @@
 package org.appitcompany.kuimakulak.service;
 
 import org.appitcompany.kuimakulak.dto.genreDto.GenreRequest;
+import org.appitcompany.kuimakulak.dto.genreDto.GenresNameResponse;
 import org.appitcompany.kuimakulak.entity.Genre;
 import org.springframework.http.ResponseEntity;
 
@@ -12,4 +13,5 @@ public interface GenreService {
 
     List<String> getAllGenres();
 
+    GenresNameResponse getGenresByAuthor(String author);
 }

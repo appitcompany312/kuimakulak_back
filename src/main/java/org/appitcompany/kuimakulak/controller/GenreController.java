@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.appitcompany.kuimakulak.dto.genreDto.GenreRequest;
-import org.appitcompany.kuimakulak.entity.Genre;
+import org.appitcompany.kuimakulak.dto.genreDto.GenresNameResponse;
 import org.appitcompany.kuimakulak.service.GenreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -27,5 +27,11 @@ public class GenreController {
     @GetMapping("/getAll")
     public List<String> getAllGenres(){
         return genreService.getAllGenres();
+    }
+
+    @Operation(summary = "get all genres by author")
+    @GetMapping("/getByAuthor")
+    public ResponseEntity<GenresNameResponse> getAllGenresByAuthor(String author){
+        return ResponseEntity.ok(genreService.getGenresByAuthor(author));
     }
 }
