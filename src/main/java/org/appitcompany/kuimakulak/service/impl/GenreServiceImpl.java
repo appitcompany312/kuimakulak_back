@@ -5,6 +5,7 @@ import org.appitcompany.kuimakulak.dto.genreDto.GenreRequest;
 import org.appitcompany.kuimakulak.dto.genreDto.GenresNameResponse;
 import org.appitcompany.kuimakulak.entity.Genre;
 import org.appitcompany.kuimakulak.exceptions.CustomAlreadyExistsException;
+import org.appitcompany.kuimakulak.exceptions.NotFoundException;
 import org.appitcompany.kuimakulak.jpaRepository.GenreRepo;
 import org.appitcompany.kuimakulak.service.GenreService;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,24 @@ public class GenreServiceImpl implements GenreService {
         return GenresNameResponse.builder()
                 .genres(byAuthor)
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<?> updateGenre(Long id, GenreRequest genreRequest) {
+        Genre genre = genreRepo.findById(id).orElseThrow(
+                ()-> new NotFoundException("No genre found with id: " + id));
+        genre.setGenreName(genreRequest.getGenreName());
+        genreRepo.save(genre);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("Жанр успешно обнавлен на "+genreRequest.getGenreName());
+    }
+
+    @Override
+    public ResponseEntity<?> deleteGenre(Long genreId) {
+        Genre genre = genreRepo.findById(genreId).orElseThrow(
+                ()-> new NotFoundException("No genre found with id: " + genreId));
+        genreRepo.delete(genre);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("genre has been deleted successfully");
     }
 }

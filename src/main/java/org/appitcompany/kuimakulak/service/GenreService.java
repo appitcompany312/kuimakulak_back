@@ -14,4 +14,8 @@ public interface GenreService {
     List<String> getAllGenres();
 
     GenresNameResponse getGenresByAuthor(String author);
+
+    ResponseEntity<?> updateGenre(Long id,GenreRequest genreRequest);
+
+    ResponseEntity<?> deleteGenre(Long genreId);
 }
