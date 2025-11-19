@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GenreController {
     private final GenreService genreService;
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     @Operation(summary = "save genre(\"ADMIN\")",description = "only admins can add genres")
     @PostMapping("/save")
     public ResponseEntity<?> saveGenre(@Valid @RequestBody GenreRequest genreRequest){
@@ -33,5 +33,19 @@ public class GenreController {
     @GetMapping("/getByAuthor")
     public ResponseEntity<GenresNameResponse> getAllGenresByAuthor(String author){
         return ResponseEntity.ok(genreService.getGenresByAuthor(author));
+    }
+
+    @Secured("ROLE_ADMIN")
+    @Operation(summary = "update genre by id (\"ADMIN\")",description = "only admins can update genres")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateGenre(@PathVariable Long id, @Valid @RequestBody GenreRequest genreRequest){
+        return genreService.updateGenre(id, genreRequest);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @Operation(summary = "delete genre by id(\"ADMIN\")",description = "only admins can delete genres")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteGenre(@PathVariable Long id){
+        return genreService.deleteGenre(id);
     }
 }

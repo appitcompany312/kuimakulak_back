@@ -17,7 +17,7 @@ spring:
   ## migration
   liquibase:
     change-log: db/changelog/main-changelog.yaml
-    enabled: true
+    enabled: false
   profiles:
     active: prod
   ##elasticsearch
